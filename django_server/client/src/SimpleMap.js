@@ -8,7 +8,7 @@ class SimpleMap extends Component{
           lat: 30.62,
           lng: -96.33
         },
-        zoom: 11,
+        zoom: 15,
         beacons: [
           {
             lat: 30.62,
