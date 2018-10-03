@@ -2,6 +2,7 @@ from SerialEmulator import SerialEmulator
 import os, pty, serial
 from threading import Thread
 import time
+import random
 
 def f():
     master, slave = pty.openpty()
@@ -19,7 +20,11 @@ def continuous_write():
     emulator = SerialEmulator('./ttydevice','./ttyclient')
     niter = 10
     while (True):
-        emulator.write('foo')
+        lat = round(random.uniform(0,1) * (random.randint(0,2) * 10), 8)
+        lon = round(random.uniform(0,1) * (random.randint(0,2) * 10), 8)
+        heart = random.randint(40, 180)
+        severity = random.randint(-1,2)
+        emulator.write(str(lat) + ";" + str(lon) + ";" + str(heart) + ";" + str(severity))
         time.sleep(.1)
         niter -= 1
 
