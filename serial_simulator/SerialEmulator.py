@@ -27,8 +27,7 @@ class SerialEmulator(object):
         while self.client.inWaiting() > 0:
             line += self.client.read(1).decode('utf-8')
 
-        if (len(line) > 0):
-            print(line)
+        return line
 
     def __del__(self):
         self.stop()
