@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import SimpleMap from './SimpleMap';
+import axios from 'axios'
 import SeverityList from './SeverityList';
 import L from 'leaflet'
 import {icons, blackIcon} from './Marker';
@@ -37,9 +37,18 @@ class App extends Component {
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
     }).addTo(map)
-    
+    axios.get('http://localhost:8000/api/',{
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Content-Type': 'application/json',
+      },
+    }
+    )
+      .then(response =>{
+        console.log(response.data)
+      })
     patients.forEach( patient => {
-      L.marker(patient.location, {icon: patient.severity != -1 ? icons[patient.severity] : blackIcon})
+      L.marker(patient.location, {icon: patient.severity !== -1 ? icons[patient.severity] : blackIcon})
         .addTo(map)
         .bindPopup(`${patient.pulse}<br> Easily customizable.`)
     })
