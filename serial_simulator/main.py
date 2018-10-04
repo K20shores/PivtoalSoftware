@@ -19,9 +19,9 @@ def f():
 def continuous_write():
     emulator = SerialEmulator('./ttydevice','./ttyclient')
     while (True):
-        lat = round(random.uniform(0,1) * (random.randint(0,2) * 10), 8)
-        lon = round(random.uniform(0,1) * (random.randint(0,2) * 10), 8)
-        z = round(random.uniform(0,1) * (random.randint(0,2) * 10), 8)
+        lat = round(random.uniform(0,1) * (10 ** random.randint(0,2)), 8)
+        lon = round(random.uniform(0,1) * (10 ** random.randint(0,2)), 8)
+        z = round(random.uniform(0,1) * (10 ** random.randint(0,2)), 8)
         heart = random.randint(40, 180)
         severity = random.randint(-1,2)
         dev_id = random.randint(1,10)
