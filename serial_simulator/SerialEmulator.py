@@ -1,3 +1,8 @@
+#
+#
+# based off of https://stackoverflow.com/a/37450382/5217293
+#
+#
 import os, subprocess, serial, time
 
 # this script lets you emulate a serial device
