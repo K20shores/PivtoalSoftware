@@ -31,7 +31,7 @@ void loop() {
     while(Serial1.available() > 0){
       //Serial.write(Serial1.read());
       char c = Serial1.read();
-      Serial.write(c);
+      //Serial.write(c);
       gps.encode(c);
     }
 
@@ -44,9 +44,10 @@ void loop() {
 
     char buf[128];
     memset(buf, '\0', sizeof(buf) / sizeof(buf[0]));
-    size_t len = 0;
+    uint8_t len = 0;
 
-    while(rf95.recv(buf, len))
+    Serial.println(rf95.available());
+    while(rf95.recv((uint8_t *)buf, &len))
     {
       Serial.print(buf);
     }
