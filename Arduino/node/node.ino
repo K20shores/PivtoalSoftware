@@ -16,8 +16,11 @@ RH_RF95 * rf95ptr = &rf95;
 
 TinyGPSPlus gps;
 
+#define LED 13
+
 void setup() {
   Serial.begin(9600);
+  delay(3000);
   Serial.println("Serial up");
   Serial1.begin(9600);
   Serial.println("Serial for GPS up");
@@ -29,25 +32,46 @@ void setup() {
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
+  digitalWrite(LED, LOW);
+  delay(1000);
+  digitalWrite(LED, HIGH);
+
+  char radioPacket[40];
+  memset(radioPacket, 0, 40);
+  
   if(Serial1.available())
   {
     while(Serial1.available() > 0){
       char c = Serial1.read();
-      Serial.write(c);
+      //Serial.write(c);
       gps.encode(c);
     }
-
-    Serial.print("LAT="); Serial.println(gps.location.lat(), 6);
-    Serial.print("LNG="); Serial.println(gps.location.lng(), 6);
-    Serial.print("ALT(ft)="); Serial.println(gps.altitude.feet(), 6);
-    Serial.print("SPD(mps)="); Serial.println(gps.speed.mps(), 6);
-
-    delay(1000);
+    //Serial.print("LAT="); Serial.println(gps.location.lat(), 6);
+    //Serial.print("LNG="); Serial.println(gps.location.lng(), 6);
+    //Serial.print("ALT(ft)="); Serial.println(gps.altitude.feet(), 6);
+    //Serial.print("SPD(mps)="); Serial.println(gps.speed.mps(), 6);
   }
+
+  char * id = "1";
+  char latBuffer[12];
+  char lngBuffer[12];
+  char altBuffer[12];
+  sprintf(radioPacket, "%s,%s,%s,%s", id, dtostrf(gps.location.lat(), 8, 6, latBuffer), dtostrf(gps.location.lng(), 8, 6, lngBuffer), itoa(gps.altitude.feet(), altBuffer, 10));
+
+  Serial.print("Sending "); Serial.println(radioPacket);
+  delay(10);
+  rf95.send((uint8_t *)radioPacket, 40);
+  Serial.print("Waiting for packet to complete... "); 
+  delay(10);
+  rf95.waitPacketSent();
+  Serial.println("Sent");
+
+  
 }
 
 void SetUpRadio(RH_RF95 * rf95){
+  Serial.println("Entering radio set up");
+  
   pinMode(RFM95_RST, OUTPUT);
   digitalWrite(RFM95_RST, HIGH);
  
@@ -86,4 +110,5 @@ void SetUpRadio(RH_RF95 * rf95){
   //////               //////
   // Radio set up finished //
   //////               //////
+  Serial.println("Radio set up complete");
 }
