@@ -46,12 +46,14 @@ void loop() {
     memset(buf, '\0', sizeof(buf) / sizeof(buf[0]));
     uint8_t len = 0;
 
-    Serial.println(rf95.available());
-    while(rf95.recv((uint8_t *)buf, &len))
+    if (rf95.available())
     {
-      Serial.print(buf);
+      while(rf95.recv((uint8_t *)buf, &len))
+      {
+        Serial.print(buf);
+      }
+      Serial.println();
     }
-    Serial.println();
   }
 }
 
@@ -88,7 +90,7 @@ void SetUpRadio(RH_RF95 * rf95){
   // The default transmitter power is 13dBm, using PA_BOOST.
   // If you are using RFM95/96/97/98 modules which uses the PA_BOOST transmitter pin, then 
   // you can set transmitter powers from 5 to 23 dBm:
-  rf95->setTxPower(21, false);
+  rf95->setTxPower(23, false);
   rf95->setModemConfig(RH_RF95::Bw31_25Cr48Sf512);
   
   //////               //////
