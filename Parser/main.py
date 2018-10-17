@@ -4,15 +4,17 @@ import json
 
 q = deque()
 errors = []
+jsonList = []
 
 def addData():
-    while True:
+    for i in range(0,(len(testInput)-1)):
         # TODO: serial port access
         # get data from serial port
-        serialInput = input("> ")
+        serialInput = testInput[i]
 
         # check format add to errors if incorrect, else just add to queue
-        serialInput = serialInput[1:-1]
+        # TODO: [1:-1] for when using actual serial data
+        serialInput = serialInput[1:-2]
         dataList = serialInput.split(",")
 
         # TODO: Need one more case for data types
@@ -20,13 +22,12 @@ def addData():
             addError(dataList[0])
         elif "" in dataList:
             addError(dataList[0])
-        elif dataList[7] != "low" or dataList[7] != "medium" or dataList[7] != "high":
-            addError(dataList[0])
         else:
             addQueue(dataList)
 
+# TODO: delete output
 def addError(id):
-    if id not in errors and id != "":
+    if str(id) not in errors and str(id) != "":
         print "adding: " + id + " to errors"
         errors.append(id)
     else:
@@ -47,11 +48,18 @@ def sendData(data):
     jsonString = json.dumps(jsonDict, sort_keys=True)
 
     # TODO: send string to database
+    jsonList.append(jsonString)
+
+    # TODO: Delete string output and format check, test purposes
     print jsonString
+    if not json.loads(jsonString):
+        print "not json format"
+        quit()
 
 def addQueue(data):
     if data[0] in errors:
         print "adding right"
+        errors.remove(data[0])
         q.append(data)
     else:
         print "adding left"
@@ -63,9 +71,16 @@ def getQueue():
             data = q.pop()
             sendData(data)
 
+# TODO: Delete file reading, test purposes
+file = open("testData.txt", "r")
+testInput = file.readlines()
+
+# Start Threads
 t1 = threading.Thread(target=addData)
 t2 = threading.Thread(target=getQueue)
+
 t1.start()
 t2.start()
+
 t1.join()
 t2.join()
