@@ -18,7 +18,7 @@ TinyGPSPlus gps;
 
 #define LED 13
 #define PACKET_SIZE 60
-#define LONG_RANGE 0 // at a penalty of much lower bandwidth
+#define LONG_RANGE 0 // at a penalty of much lower bandwidth, both modems must be same
 
 time_t lastUpdate = millis();
 
@@ -42,7 +42,7 @@ void loop() {
         gps.encode(c);
       }
     }
-    
+
     reportSelfPositioning(gps);
     lastUpdate = currentTime;
   }
@@ -63,7 +63,6 @@ void loop() {
     }
     else{
       Serial.print("[]");
-    }
   }
 
 }
