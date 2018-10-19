@@ -17,6 +17,9 @@ RH_RF95 * rf95ptr = &rf95;
 TinyGPSPlus gps;
 
 #define LED 13
+#define PACKET_SIZE 60
+#define LONG_RANGE 0 // at a penalty of much lower bandwidth
+#define SEND_RATE 1000//  ms delay between sending
 
 void setup() {
   Serial.begin(9600);
@@ -33,40 +36,38 @@ void setup() {
 
 void loop() {
   digitalWrite(LED, LOW);
-  delay(1000);
+  delay(SEND_RATE);
   digitalWrite(LED, HIGH);
 
-  char radioPacket[40];
-  memset(radioPacket, 0, 40);
+  char radioPacket[PACKET_SIZE];
+  memset(radioPacket, 0, PACKET_SIZE);
   
   if(Serial1.available())
   {
     while(Serial1.available() > 0){
       char c = Serial1.read();
-      //Serial.write(c);
       gps.encode(c);
     }
-    //Serial.print("LAT="); Serial.println(gps.location.lat(), 6);
-    //Serial.print("LNG="); Serial.println(gps.location.lng(), 6);
-    //Serial.print("ALT(ft)="); Serial.println(gps.altitude.feet(), 6);
-    //Serial.print("SPD(mps)="); Serial.println(gps.speed.mps(), 6);
   }
 
   char * id = "1";
   char latBuffer[12];
+  dtostrf(gps.location.lat(), 8, 6, latBuffer);
   char lngBuffer[12];
+  dtostrf(gps.location.lng(), 8, 6, lngBuffer);
   char altBuffer[12];
-  sprintf(radioPacket, "%s,%s,%s,%s", id, dtostrf(gps.location.lat(), 8, 6, latBuffer), dtostrf(gps.location.lng(), 8, 6, lngBuffer), itoa(gps.altitude.feet(), altBuffer, 10));
+  itoa(gps.altitude.feet(), altBuffer, 10);
+  char * biometricData = "n/a";
+  char * severity = "n/a";
+  sprintf(radioPacket, "%s,%s,%s,%s,%s,%s", id, latBuffer, lngBuffer, altBuffer, biometricData, severity);
 
   Serial.print("Sending "); Serial.println(radioPacket);
   delay(10);
-  rf95.send((uint8_t *)radioPacket, 40);
+  rf95.send((uint8_t *)radioPacket, PACKET_SIZE);
   Serial.print("Waiting for packet to complete... "); 
   delay(10);
   rf95.waitPacketSent();
   Serial.println("Sent");
-
-  
 }
 
 void SetUpRadio(RH_RF95 * rf95){
@@ -104,8 +105,10 @@ void SetUpRadio(RH_RF95 * rf95){
   // The default transmitter power is 13dBm, using PA_BOOST.
   // If you are using RFM95/96/97/98 modules which uses the PA_BOOST transmitter pin, then 
   // you can set transmitter powers from 5 to 23 dBm:
-  rf95->setTxPower(21, false);
-  rf95->setModemConfig(RH_RF95::Bw31_25Cr48Sf512);
+  rf95->setTxPower(23, false);
+  #if LONG_RANGE
+    rf95->setModemConfig(RH_RF95::Bw31_25Cr48Sf512);
+  #endif
   
   //////               //////
   // Radio set up finished //

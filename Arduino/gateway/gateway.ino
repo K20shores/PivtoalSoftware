@@ -16,6 +16,12 @@ RH_RF95 * rf95ptr = &rf95;
 
 TinyGPSPlus gps;
 
+#define LED 13
+#define PACKET_SIZE 60
+#define LONG_RANGE 0 // at a penalty of much lower bandwidth
+
+time_t lastUpdate = millis();
+
 void setup() {
   // put your setup code here, to run once:
   Serial.begin(9600);
@@ -25,33 +31,61 @@ void setup() {
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
-  if(Serial1.available())
-  {
-    while(Serial1.available() > 0){
-      //Serial.write(Serial1.read());
-      char c = Serial1.read();
-      Serial.write(c);
-      gps.encode(c);
+  
+  //  Report self gps every three seconds
+  time_t currentTime = millis();
+  if((currentTime - lastUpdate) > 3000){
+    
+    if(Serial1.available()){
+      while(Serial1.available() > 0){
+        char c = Serial1.read();
+        gps.encode(c);
+      }
     }
-
-    //Serial.print("LAT="); Serial.println(gps.location.lat(), 6);
-    //Serial.print("LNG="); Serial.println(gps.location.lng(), 6);
-    //Serial.print("ALT(ft)="); Serial.println(gps.altitude.feet(), 6);
-    //Serial.print("SPD(mps)="); Serial.println(gps.speed.mps(), 6);
-
-    delay(1000);
-
-    char buf[128];
-    memset(buf, '\0', sizeof(buf) / sizeof(buf[0]));
-    size_t len = 0;
-
-    while(rf95.recv(buf, len))
-    {
-      Serial.print(buf);
-    }
-    Serial.println();
+    
+    reportSelfPositioning(gps);
+    lastUpdate = currentTime;
   }
+
+  //  Receive incoming packets, print to serial
+  if(rf95.available()){
+    uint8_t buf[RH_RF95_MAX_MESSAGE_LEN];
+    uint8_t len = sizeof(buf);
+
+    if (rf95.recv(buf, &len)){
+      digitalWrite(LED, HIGH);
+      
+      Serial.print((char*)buf);
+      Serial.print(",");
+      Serial.println(rf95.lastRssi(), DEC);
+ 
+      digitalWrite(LED, LOW);
+    }
+    else{
+      Serial.print("[]");
+    }
+  }
+
+}
+
+void reportSelfPositioning(TinyGPSPlus gps){
+  //  Gateways always report self as ID 0
+  char * id = "0";
+  
+  Serial.print(id);
+  Serial.print(",");
+  Serial.print(gps.location.lat(), 6);
+  Serial.print(",");
+  Serial.print(gps.location.lng(), 6);
+  Serial.print(",");
+  Serial.print(gps.altitude.feet(), 6);
+  Serial.print(",");
+  Serial.print("bio");
+  Serial.print(",");
+  Serial.print("sev");
+  Serial.print(",");
+  Serial.print("rssi");
+  Serial.println();
 }
 
 void SetUpRadio(RH_RF95 * rf95){
@@ -87,8 +121,10 @@ void SetUpRadio(RH_RF95 * rf95){
   // The default transmitter power is 13dBm, using PA_BOOST.
   // If you are using RFM95/96/97/98 modules which uses the PA_BOOST transmitter pin, then 
   // you can set transmitter powers from 5 to 23 dBm:
-  rf95->setTxPower(21, false);
-  rf95->setModemConfig(RH_RF95::Bw31_25Cr48Sf512);
+  rf95->setTxPower(23, false);
+  #if LONG_RANGE
+    rf95->setModemConfig(RH_RF95::Bw31_25Cr48Sf512);
+  #endif
   
   //////               //////
   // Radio set up finished //
