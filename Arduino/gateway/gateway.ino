@@ -63,6 +63,7 @@ void loop() {
     }
     else{
       Serial.print("[]");
+    }
   }
 
 }
