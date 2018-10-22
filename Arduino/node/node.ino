@@ -61,7 +61,7 @@ void loop() {
   char * severity = "n/a";
   char * battery = "n/a";
   char * tm = "n/a";
-  sprintf(radioPacket, "%s,%s,%s,%s,%s,%s,%s,%s", id, latBuffer, lngBuffer, altBuffer, biometricData, tm, battery, severity);
+  sprintf(radioPacket, "%s,%s,%s,%s,%s,%s,%s,%s\n", id, latBuffer, lngBuffer, altBuffer, biometricData, tm, battery, severity);
 
   Serial.print("Sending "); Serial.println(radioPacket);
   delay(10);
