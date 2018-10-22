@@ -50,7 +50,7 @@ void loop() {
     }
   }
 
-  char * id = "1";
+  char * id = "2";
   char latBuffer[12];
   dtostrf(gps.location.lat(), 8, 6, latBuffer);
   char lngBuffer[12];
@@ -59,7 +59,9 @@ void loop() {
   itoa(gps.altitude.feet(), altBuffer, 10);
   char * biometricData = "n/a";
   char * severity = "n/a";
-  sprintf(radioPacket, "%s,%s,%s,%s,%s,%s", id, latBuffer, lngBuffer, altBuffer, biometricData, severity);
+  char * battery = "n/a";
+  char * tm = "n/a";
+  sprintf(radioPacket, "%s,%s,%s,%s,%s,%s,%s,%s", id, latBuffer, lngBuffer, altBuffer, biometricData, tm, battery, severity);
 
   Serial.print("Sending "); Serial.println(radioPacket);
   delay(10);

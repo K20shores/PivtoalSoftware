@@ -82,6 +82,10 @@ void reportSelfPositioning(TinyGPSPlus gps){
   Serial.print(",");
   Serial.print("bio");
   Serial.print(",");
+  Serial.print("tm");
+  Serial.print(",");
+  Serial.print("battery");
+  Serial.print(",");
   Serial.print("sev");
   Serial.print(",");
   Serial.print("rssi");
