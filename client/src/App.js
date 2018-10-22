@@ -1,32 +1,40 @@
 import React, { Component } from 'react';
 import axios from 'axios'
-import SeverityList from './SeverityList';
+import ResourceList from './ResourceList';
+import DetailedList from './DetailedList'
+import NavBar from './NavBar'
 import L from 'leaflet'
 import {icons, blackIcon} from './Marker';
-const patients = [
+const resources = [
   {
     location: [30.6280, -96.334],
-    severity: 1,
-    pulse: 120
+    quantity: 100,
+    name: 'bandages'
   },
   {
     location: [30.5910, -96.3640],
-    severity: 0,
-    pulse: 40
+    quantity: 100,
+    name: 'food'
   },
   {
     location: [30.6280, -96.350],
-    severity: 2,
-    pulse: 180
+    quantity: 100,
+    name: 'water'
   },
   {
     location: [30.659, -96.334],
-    severity: -1,
-    pulse: 0
+    quantity: 100,
+    name: 'blankets'
   }
 ]
 
 class App extends Component {
+  constructor(props){
+    super(props);
+    this.state = {
+
+    }
+  }
   componentDidMount(){
 
     //College station 30.6280° N, 96.3344° W
@@ -37,6 +45,7 @@ class App extends Component {
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
     }).addTo(map)
+    /*
     axios.get('http://localhost:8000/api/',{
       headers: {
         'Access-Control-Allow-Origin': '*',
@@ -44,24 +53,41 @@ class App extends Component {
       },
     }
     )
-      .then(response =>{
-        console.log(response.data)
-      })
-    patients.forEach( patient => {
-      L.marker(patient.location, {icon: patient.severity !== -1 ? icons[patient.severity] : blackIcon})
-        .addTo(map)
-        .bindPopup(`${patient.pulse}<br> Easily customizable.`)
+    .then(response =>{
+      console.log(response.data)
     })
+    */
+    console.log(L)
+    // resources.forEach( resource => {
+    //   L.marker(resource.location, {icon: resource.name !== '' ? icons[resource.name] : blackIcon})
+    //     .addTo(map)
+    //     .bindPopup(`${resource.name}<br> Easily customizable.`)
+    // })
     
   }
   render() {
     return (
-      <div style={{display: 'flex', flexDirection: 'row'}}>
-        <div style={ { width: '720px', height: '960px' }} id="mapid"></div>
-        <SeverityList
-          patients={patients}
-        />
+      <div>
+        <NavBar/>
+        <div style={{display: 'flex', flexDirection: 'row'}}>
+          <div style={ { width: '720px', height: '960px' }} id="mapid"></div>
+          <div style={{display: 'flex', flexDirection: 'column', paddingLeft: '10px'}}>
+            <div className='card'>
+              <ResourceList
+                resources={resources}
+              />
+            </div>
+            <div className='card'>
+              <DetailedList
+                selectedResource = {this.state.selectedResource}
+              />
+            </div>
+            
+          </div>
+          
+        </div>
       </div>
+      
     );
   }
 }

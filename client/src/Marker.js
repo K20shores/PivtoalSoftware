@@ -4,7 +4,7 @@ import L from 'leaflet'
 const Marker = ({ text,severity }) => <div style={{color: severity <= 1 ? 'yellow' : 'red' }}>{text}</div>;
 export default Marker;
 
-const greenIcon = L.icon({
+const bandagesIcon = L.icon({
     iconUrl: 'green-marker-icon.png',
     // shadowUrl: 'leaf-shadow.png',
 
@@ -15,7 +15,7 @@ const greenIcon = L.icon({
     popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
 });
 
-const yellowIcon = L.icon({
+const blanketsIcon = L.icon({
     iconUrl: 'yellow-marker-icon.png',
     // shadowUrl: 'leaf-shadow.png',
 
@@ -26,7 +26,7 @@ const yellowIcon = L.icon({
     popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
 });
 
-const redIcon = L.icon({
+const foodIcon = L.icon({
     iconUrl: 'red-marker-icon.png',
     // shadowUrl: 'leaf-shadow.png',
 
@@ -49,7 +49,7 @@ export const blackIcon = L.icon({
 });
 
 export const icons = [
-    greenIcon,
-    yellowIcon,
-    redIcon
+    bandagesIcon,
+    blanketsIcon,
+    foodIcon
 ]
