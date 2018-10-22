@@ -1,21 +1,23 @@
 from collections import deque
 import threading
-import json
+import datetime
+import DataManager
+import serial
 
 q = deque()
 errors = []
 jsonList = []
 
-def addData():
-    for i in range(0,(len(testInput)-1)):
-        # TODO: serial port access
-        # get data from serial port
-        serialInput = testInput[i]
+#TODO: change code to reflect pivot.
 
-        # check format add to errors if incorrect, else just add to queue
-        # TODO: [1:-1] for when using actual serial data
-        serialInput = serialInput[1:-2]
+def addData():
+    while True:
+        serialInput = ser.readline()
+
         dataList = serialInput.split(",")
+
+
+        dataList.pop()
 
         # TODO: Need one more case for data types
         if len(dataList) != 8:
@@ -23,6 +25,7 @@ def addData():
         elif "" in dataList:
             addError(dataList[0])
         else:
+            dataList[5] = str(datetime.datetime.now())
             addQueue(dataList)
 
 # TODO: delete output
@@ -34,7 +37,7 @@ def addError(id):
         print "ID exists in errors OR ID not present."
 
 def sendData(data):
-    jsonDict = {
+    entry = {
         "nodeID" : data[0],
         "x_coord" : data[1],
         "y_coord" : data[2],
@@ -45,16 +48,7 @@ def sendData(data):
         "priority" : data[7]
     }
 
-    jsonString = json.dumps(jsonDict, sort_keys=True)
-
-    # TODO: send string to database
-    jsonList.append(jsonString)
-
-    # TODO: Delete string output and format check, test purposes
-    print jsonString
-    if not json.loads(jsonString):
-        print "not json format"
-        quit()
+    DataManager.writeData(entry)
 
 def addQueue(data):
     if data[0] in errors:
@@ -71,9 +65,7 @@ def getQueue():
             data = q.pop()
             sendData(data)
 
-# TODO: Delete file reading, test purposes
-file = open("testData.txt", "r")
-testInput = file.readlines()
+ser = serial.Serial(port='/dev/cu.usbmodem14511', baudrate=9600)
 
 # Start Threads
 t1 = threading.Thread(target=addData)
