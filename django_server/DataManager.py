@@ -5,32 +5,40 @@ DB_URL = 'mongodb://localhost:27017'
 DB_NAME = 'PIVOTAL_DB'
 DB_COLLECTION = 'NodeData'
 
+
 def writeData(entry):
     try:
         client = pymongo.MongoClient(DB_URL)
         db = client[DB_NAME]
         col = db[DB_COLLECTION]
-        
+
         x = col.insert_one(entry)
     except pymongo.errors.ConnectionFailure as e:
         print("Could not connect to server")
 
-def findPatients(request):
+
+def findResources(request):
     try:
         client = pymongo.MongoClient(DB_URL)
         db = client[DB_NAME]
         col = db[DB_COLLECTION]
-        patients = []
+        resources = []
         for x in col.find():
             cleanX = x
             cleanX["_id"] = str(x["_id"])
-            patients.append(cleanX)
+            resources.append(cleanX)
             print(x)
-        res = JsonResponse(patients, safe=False)
+        res = JsonResponse(resources, safe=False)
         res["Access-Control-Allow-Origin"] = "*"
         res["Access-Control-Allow-Methods"] = "GET"
         return res
     except pymongo.errors.ConnectionFailure as e:
         print("Could not connect to server")
-findPatients('l')
 
+def testFindData():
+    client = pymongo.MongoClient(DB_URL)
+    db = client[DB_NAME]
+    col = db[DB_COLLECTION]
+    resources = []
+    for x in col.find():
+        print(x)
