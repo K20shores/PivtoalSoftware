@@ -4,14 +4,14 @@ const MyNavBar = () => (
     <Navbar>
         <Navbar.Header>
             <Navbar.Brand>
-            <a href="#home">Resource Tracker</a>
+            <a href="/">Resource Tracker</a>
             </Navbar.Brand>
         </Navbar.Header>
         <Nav>
-            <NavItem eventKey={1} href="#">
+            <NavItem eventKey={1} href="/">
             Home
             </NavItem>
-            <NavItem eventKey={2} href="#">
+            <NavItem eventKey={2} href="about">
             About
             </NavItem>
         </Nav>
