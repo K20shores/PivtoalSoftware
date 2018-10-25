@@ -1,19 +1,20 @@
 import React from 'react';
-import './style.css';
+//import './style.css';
+import {Table} from 'react-bootstrap'
 
 const ResourceList = ({resources}) => (
     <div>
         <h2>Resources</h2>
-        <table >
+        <Table striped bordered condensed hover>
             <thead>
                 <tr>
                     <th>id</th>
-                    <th>Resource</th> 
+                    <th>Resource</th>
                     <th>Quantity</th>
-                    
+
                 </tr>
             </thead>
-        
+
             <tbody>
                 {resources.map(r => (
                     <tr key={r.id}>
@@ -23,7 +24,7 @@ const ResourceList = ({resources}) => (
                     </tr>
                 ))}
             </tbody>
-        </table>
+        </Table>
     </div>
 )
 export default ResourceList;
