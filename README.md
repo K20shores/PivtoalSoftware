@@ -7,11 +7,14 @@ A pivotal approach to graduating
 python manage.py runserver
 `
 * Start frontend
+
 `
 cd client
 `
+
 `npm install
 `
+
 `
 npm start
 `
