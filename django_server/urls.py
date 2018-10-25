@@ -20,7 +20,7 @@ from . import DataManager
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/', DataManager.findPatients, name='patients'),
+    path('resources/', include('resources.urls')),
     # re_path('.*', TemplateView.as_view(template_name='index.html'))
-    
+
 ]
