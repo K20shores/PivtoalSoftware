@@ -48,8 +48,8 @@ export const blackIcon = L.icon({
     popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
 });
 
-export const icons = [
-    bandagesIcon,
-    blanketsIcon,
-    foodIcon
-]
+export const icons = {
+    'bandages': bandagesIcon,
+    'blankets': blanketsIcon,
+    'food': foodIcon
+}

@@ -36,7 +36,7 @@ const About = () => (
         </div>
         {people.map(p => (
             <div className='business-card'>
-                <img src={`${p.name}.jpg`}/>
+                <img src={`${p.name}.jpg`} alt={p.name}/>
                 <p>{p.description}</p>
             
             </div>
