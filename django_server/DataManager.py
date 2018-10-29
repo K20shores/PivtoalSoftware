@@ -5,6 +5,13 @@ DB_URL = 'mongodb://localhost:27017'
 DB_NAME = 'PIVOTAL_DB'
 DB_COLLECTION = 'NodeData'
 
+def deleteAll():
+    client = pymongo.MongoClient(DB_URL)
+    db = client[DB_NAME]
+    col = db[DB_COLLECTION]
+
+    x = col.delete_many({})
+
 def alreadyExists(nID):
     client = pymongo.MongoClient(DB_URL)
     db = client[DB_NAME]
@@ -25,30 +32,15 @@ def writeData(entry):
         #else delete found and insert new.
         id = entry['nodeID']
         if alreadyExists(id):
-             col.delete_one({"nodeId": entry['nodeID']})
-             x = col.insert_one(entry)
+             x = col.delete_many({"nodeID": id})
+             y = col.insert_one(entry)
              print("updated entry")
         else:
-             x = col.insert_one(entry)
+             z = col.insert_one(entry)
              print("inserted entry")
-
-        # if col.find( {'nodeId': entry['nodeID']}).count() > 0:
-        #      print(col.find_one( {'nodeId': entry['nodeID']} ))
-        #      col.delete_one({"nodeId": entry['nodeID']})
-        #      x = col.insert_one(entry)
-        #      print("updated entry")
-        # else:
-        #      x = col.insert_one(entry)
-        #      print("inserted entry")
 
     except pymongo.errors.ConnectionFailure as e:
         print("Could not connect to server")
-
-
-writeData({"nodeID": 8})
-writeData({"nodeID": 50119})
-writeData({"nodeID": 8})
-
 
 def findResources(request):
     '''This for the reacts API'''
@@ -78,3 +70,7 @@ def getResources():
     for x in col.find():
         resources.append(x)
     return resources
+
+
+
+print(getResources())
