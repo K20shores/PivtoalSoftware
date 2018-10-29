@@ -7,28 +7,6 @@ import L from 'leaflet'
 
 import {connect} from 'react-redux'
 import {setMarkers} from './redux/resources'
-// const resources = [
-//   {
-//     location: [30.6280, -96.334],
-//     quantity: 100,
-//     name: 'bandages'
-//   },
-//   {
-//     location: [30.5910, -96.3640],
-//     quantity: 100,
-//     name: 'food'
-//   },
-//   // {
-//   //   location: [30.6280, -96.350],
-//   //   quantity: 100,
-//   //   name: 'water'
-//   // },
-//   {
-//     location: [30.659, -96.334],
-//     quantity: 100,
-//     name: 'blankets'
-//   }
-// ]
 
 class App extends Component {
   constructor(props){
@@ -98,4 +76,4 @@ const mapStateToProps = state => {
     resources: state.resources.resources
   }
 }
-export default connect(App)(mapStateToProps,{setMarkers});
+export default connect(mapStateToProps,{setMarkers})(App);
