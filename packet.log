@@ -1,0 +1,180 @@
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex 2017.5.23)  28 OCT 2018 20:50
+entering extended mode
+ restricted \write18 enabled.
+ %&-line parsing enabled.
+**packet.tex
+(./packet.tex
+LaTeX2e <2017-04-15>
+Babel <3.10> and hyphenation patterns for 84 language(s) loaded.
+(/usr/local/texlive/2017/texmf-dist/tex/latex/standalone/standalone.cls
+Document Class: standalone 2015/07/15 v1.2 Class to compile TeX sub-files stand
+alone
+(/usr/local/texlive/2017/texmf-dist/tex/generic/oberdiek/ifluatex.sty
+Package: ifluatex 2016/05/16 v1.4 Provides the ifluatex switch (HO)
+Package ifluatex Info: LuaTeX not detected.
+)
+(/usr/local/texlive/2017/texmf-dist/tex/generic/oberdiek/ifpdf.sty
+Package: ifpdf 2017/03/15 v3.2 Provides the ifpdf switch
+)
+(/usr/local/texlive/2017/texmf-dist/tex/generic/ifxetex/ifxetex.sty
+Package: ifxetex 2010/09/12 v0.6 Provides ifxetex conditional
+)
+(/usr/local/texlive/2017/texmf-dist/tex/latex/xkeyval/xkeyval.sty
+Package: xkeyval 2014/12/03 v2.7a package option processing (HA)
+
+(/usr/local/texlive/2017/texmf-dist/tex/generic/xkeyval/xkeyval.tex
+(/usr/local/texlive/2017/texmf-dist/tex/generic/xkeyval/xkvutils.tex
+\XKV@toks=\toks14
+\XKV@tempa@toks=\toks15
+
+(/usr/local/texlive/2017/texmf-dist/tex/generic/xkeyval/keyval.tex))
+\XKV@depth=\count79
+File: xkeyval.tex 2014/12/03 v2.7a key=value parser (HA)
+))
+\sa@internal=\count80
+\c@sapage=\count81
+
+(/usr/local/texlive/2017/texmf-dist/tex/latex/standalone/standalone.cfg
+File: standalone.cfg 2015/07/15 v1.2 Default configuration file for 'standalone
+' class
+)
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/article.cls
+Document Class: article 2014/09/29 v1.4h Standard LaTeX document class
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/size10.clo
+File: size10.clo 2014/09/29 v1.4h Standard LaTeX file (size option)
+)
+\c@part=\count82
+\c@section=\count83
+\c@subsection=\count84
+\c@subsubsection=\count85
+\c@paragraph=\count86
+\c@subparagraph=\count87
+\c@figure=\count88
+\c@table=\count89
+\abovecaptionskip=\skip41
+\belowcaptionskip=\skip42
+\bibindent=\dimen102
+)
+\sa@box=\box26
+runsystem(pdflatex  -shell-escape  -jobname 'packet' '\expandafter\def\csname s
+a@internal@run\endcsname{1}\input{packet}')...disabled (restricted).
+
+ (./packet.aux)
+runsystem(convert -density 300 packet.pdf  -quality 90 packet.png)...disabled (
+restricted).
+
+
+
+Class standalone Warning: Conversion failed! Please ensure that shell escape
+(standalone)              is enabled (e.g. use '-shell-escape').
+
+) (/usr/local/texlive/2017/texmf-dist/tex/latex/bytefield/bytefield.sty
+Package: bytefield 2015/10/28 v2.3 Network protocol diagrams
+
+(/usr/local/texlive/2017/texmf-dist/tex/latex/tools/calc.sty
+Package: calc 2014/10/28 v4.3 Infix arithmetic (KKT,FJ)
+\calc@Acount=\count90
+\calc@Bcount=\count91
+\calc@Adimen=\dimen103
+\calc@Bdimen=\dimen104
+\calc@Askip=\skip43
+\calc@Bskip=\skip44
+LaTeX Info: Redefining \setlength on input line 80.
+LaTeX Info: Redefining \addtolength on input line 81.
+\calc@Ccount=\count92
+\calc@Cskip=\skip45
+)
+\bytefield@height=\skip46
+\bytefield@height@increment=\skip47
+\entire@bytefield@picture=\box27
+\bf@bitwidth=\skip48
+\bf@bitheight=\skip49
+\units@wide=\skip50
+\units@tall=\skip51
+\units@high=\skip52
+\header@xpos=\skip53
+\c@header@val=\count93
+\c@max@header@val=\count94
+\curly@box=\box28
+\wordlabelr@start=\skip54
+\wordlabelr@end=\skip55
+\wordlabell@start=\skip56
+\wordlabell@end=\skip57
+\total@lbox@width=\skip58
+\label@box@width=\skip59
+\label@box@height=\skip60
+\word@label@box=\box29
+) (./packet.aux)
+\openout1 = `packet.aux'.
+
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 4.
+LaTeX Font Info:    ... okay on input line 4.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 4.
+LaTeX Font Info:    ... okay on input line 4.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 4.
+LaTeX Font Info:    ... okay on input line 4.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 4.
+LaTeX Font Info:    ... okay on input line 4.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 4.
+LaTeX Font Info:    ... okay on input line 4.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 4.
+LaTeX Font Info:    ... okay on input line 4.
+\height=\dimen105
+\depth=\dimen106
+\totalheight=\dimen107
+\width=\dimen108
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <7> on input line 12.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <5> on input line 12.
+\height=\dimen109
+\depth=\dimen110
+\totalheight=\dimen111
+\width=\dimen112
+\height=\dimen113
+\depth=\dimen114
+\totalheight=\dimen115
+\width=\dimen116
+\height=\dimen117
+\depth=\dimen118
+\totalheight=\dimen119
+\width=\dimen120
+\height=\dimen121
+\depth=\dimen122
+\totalheight=\dimen123
+\width=\dimen124
+\height=\dimen125
+\depth=\dimen126
+\totalheight=\dimen127
+\width=\dimen128
+\height=\dimen129
+\depth=\dimen130
+\totalheight=\dimen131
+\width=\dimen132
+\height=\dimen133
+\depth=\dimen134
+\totalheight=\dimen135
+\width=\dimen136
+
+[1
+
+{/usr/local/texlive/2017/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
+(./packet.aux) ) 
+Here is how much of TeX's memory you used:
+ 961 strings out of 492995
+ 15048 string characters out of 6132704
+ 74726 words of memory out of 5000000
+ 4560 multiletter control sequences out of 15000+600000
+ 3640 words of font info for 14 fonts, out of 8000000 for 9000
+ 1141 hyphenation exceptions out of 8191
+ 39i,12n,79p,200b,261s stack positions out of 5000i,500n,10000p,200000b,80000s
+</usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts
+/cm/cmr10.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/c
+m/cmr5.pfb>
+Output written on packet.pdf (1 page, 23324 bytes).
+PDF statistics:
+ 16 PDF objects out of 1000 (max. 8388607)
+ 10 compressed objects within 1 object stream
+ 0 named destinations out of 1000 (max. 500000)
+ 1 words of extra memory for PDF output out of 10000 (max. 10000000)
+

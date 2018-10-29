@@ -29,7 +29,6 @@ const DetailedList = ({Detaileds}) => (
                 </tr>
 
             </tbody>
-
         </table>
     </div>
 )

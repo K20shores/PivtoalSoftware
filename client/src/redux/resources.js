@@ -16,7 +16,14 @@ export default function reducer(state = INITIAL_STATE, action = {}){
         
             let newMarkers = {}
             action.resources.forEach( resource => {
-                let m = L.marker(resource.location, {icon: resource.name !== '' ? icons[resource.name] : blackIcon})
+                resource['location'] = {
+                    'lat': resource.x_coord,
+                    'lng': resource.y_coord
+                }
+                let m = L.marker(resource.location, {icon:  blackIcon})
+                //let m = L.marker(resource.location, {icon: resource.name !== '' ? icons[resource.name] : blackIcon})
+                console.log(resource);
+                //console.log(m,action.map);
                 m.addTo(action.map)
                 m.bindPopup(`${resource.name}<br> Easily customizable.`)
                 newMarkers[resource.id] = m;

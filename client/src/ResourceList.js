@@ -8,7 +8,7 @@ const ResourceList = ({resources}) => (
             <thead>
                 <tr>
                     <th>ID</th>
-                    <th>Resource</th>
+                    <th>Resource</th> 
                     <th>Quantity</th>
 
                 </tr>
