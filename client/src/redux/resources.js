@@ -2,7 +2,7 @@ import L from 'leaflet'
 import {icons, blackIcon} from '../Marker';
 //set markers
 const SET_MARKERS = 'resources/SET_MARKERS';
-const INITIAL_STATE = {markers: []}
+const INITIAL_STATE = {markers: [], resources:[]}
 export default function reducer(state = INITIAL_STATE, action = {}){
     switch (action.type) {
         // do reducer stuff
@@ -28,7 +28,7 @@ export default function reducer(state = INITIAL_STATE, action = {}){
                 m.bindPopup(`${resource.name}<br> Easily customizable.`)
                 newMarkers[resource.id] = m;
             })
-            return {...state, resources: action.markers}
+            return {...state, markers: action.markers, resources: action.resources}
         }
         default: return state;
     }

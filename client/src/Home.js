@@ -14,7 +14,8 @@ class App extends Component {
     this.state = {
       resources: [],
       markers: [],
-      map: null
+      map: null,
+      selectedResource: {}
     }
     // this.setMarkers = this.setMarkers.bind(this)
   }

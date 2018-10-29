@@ -1,13 +1,14 @@
 import React from 'react';
-import './style.css';
-const DetailedList = ({Detaileds}) => (
+//import './style.css';
+import {Table} from 'react-bootstrap'
+const DetailedList = ({selectedResource}) => (
     <div>
         <h2>Details</h2>
-        <table >
+        <Table striped bordered condensed hover>
             <tbody>
 
                 <tr>
-                    <td>ID</td><td>ID</td>
+                    <td>ID</td><td>{selectedResource.id}</td>
                 </tr>
                 <tr>
                     <td>Distance</td><td>Distance</td>
@@ -29,7 +30,7 @@ const DetailedList = ({Detaileds}) => (
                 </tr>
 
             </tbody>
-        </table>
+        </Table>
     </div>
 )
 export default DetailedList;
