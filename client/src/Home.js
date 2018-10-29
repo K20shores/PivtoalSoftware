@@ -49,7 +49,7 @@ class App extends Component {
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
     }).addTo(map)
-    
+
     setInterval(function() {
 
       const axiosConfig = {
@@ -66,11 +66,11 @@ class App extends Component {
     }, 5000);
   }
 
-  
+
   render() {
     return (
       <div>
-        
+
         <div style={{display: 'flex', flexDirection: 'row'}}>
           <div style={ { width: '720px', height: '960px' }} id="mapid"></div>
           <div style={{display: 'flex', flexDirection: 'column', paddingLeft: '10px'}}>
@@ -84,12 +84,12 @@ class App extends Component {
                 selectedResource = {this.state.selectedResource}
               />
             </div>
-            
+
           </div>
-          
+
         </div>
       </div>
-      
+
     );
   }
 }

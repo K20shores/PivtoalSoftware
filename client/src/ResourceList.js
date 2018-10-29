@@ -1,14 +1,13 @@
 import React from 'react';
-//import './style.css';
+// import './style.css';
 import {Table} from 'react-bootstrap'
-
 const ResourceList = ({resources}) => (
     <div>
         <h2>Resources</h2>
         <Table striped bordered condensed hover>
             <thead>
                 <tr>
-                    <th>id</th>
+                    <th>ID</th>
                     <th>Resource</th>
                     <th>Quantity</th>
 
