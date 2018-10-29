@@ -1,7 +1,7 @@
 import React from 'react';
 // import './style.css';
 import {Table} from 'react-bootstrap'
-const ResourceList = ({resources}) => (
+const ResourceList = ({resources, showDetails}) => (
     <div>
         <h2>Resources</h2>
         <Table striped bordered condensed hover>
@@ -15,8 +15,8 @@ const ResourceList = ({resources}) => (
             </thead>
 
             <tbody>
-                {resources && resources.map(r => (
-                    <tr key={r.id}>
+                {resources && resources.map((r,index) => (
+                    <tr key={r.id} onClick={() => showDetails(index)}>
                         <td>{r.id}</td>
                         <td>{r.name}</td>
                         <td>{r.quantity}</td>
