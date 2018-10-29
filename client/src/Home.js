@@ -28,7 +28,7 @@ class App extends Component {
       attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
     }).addTo(map)
     
-    setInterval(function() {
+    setInterval(() => {
 
       const axiosConfig = {
         method: 'GET',
@@ -39,7 +39,7 @@ class App extends Component {
       }
       axios.get('http://127.0.0.1:8000/api/',axiosConfig)
       .then(response =>{
-        this.props.setMarkers(response.data)
+        this.props.setMarkers(response.data, map)
       })
     }, 5000);
   }
