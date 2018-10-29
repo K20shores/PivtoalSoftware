@@ -2,7 +2,7 @@ import L from 'leaflet'
 import {icons, blackIcon} from '../Marker';
 //set markers
 const SET_MARKERS = 'resources/SET_MARKERS';
-const INITIAL_STATE = {resources: []}
+const INITIAL_STATE = {markers: []}
 export default function reducer(state = INITIAL_STATE, action = {}){
     switch (action.type) {
         // do reducer stuff
@@ -10,10 +10,10 @@ export default function reducer(state = INITIAL_STATE, action = {}){
         {
             //remove old layers
             for (let index = 0; index < state.markers; index++) {
-                action.map.removeLayer(this.state.markers[index])
-                
+                action.map.removeLayer(state.markers[index])
+
             }
-        
+
             let newMarkers = {}
             action.resources.forEach( resource => {
                 resource['location'] = {
@@ -35,6 +35,6 @@ export default function reducer(state = INITIAL_STATE, action = {}){
 }
 
 export function setMarkers(resources, map) {
-    
+
     return {type: SET_MARKERS, resources: resources, map: map}
 }
