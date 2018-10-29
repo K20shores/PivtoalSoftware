@@ -12,10 +12,20 @@ def writeData(entry):
         db = client[DB_NAME]
         col = db[DB_COLLECTION]
 
-        x = col.insert_one(entry)
+        #if you don't find matching entry, insert new
+        #else delete found and insert new.
+        if (col.find_one( {"nodeId": entry['nodeID']} ) is None):
+             x = col.insert_one(entry)
+        else:
+             col.delete_one({"nodeId": entry['nodeID']})
+             x = col.insert_one(entry)
+
     except pymongo.errors.ConnectionFailure as e:
         print("Could not connect to server")
 
+
+writeData({"nodeID": 6})
+writeData({"nodeID": 6018})
 
 def findResources(request):
     '''This for the reacts API'''
