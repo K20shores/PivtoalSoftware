@@ -8,14 +8,14 @@ const ResourceList = ({resources}) => (
             <thead>
                 <tr>
                     <th>ID</th>
-                    <th>Resource</th> 
+                    <th>Resource</th>
                     <th>Quantity</th>
 
                 </tr>
             </thead>
 
             <tbody>
-                {resources.map(r => (
+                {resources && resources.map(r => (
                     <tr key={r.id}>
                         <td>{r.id}</td>
                         <td>{r.name}</td>

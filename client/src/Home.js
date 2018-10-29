@@ -27,7 +27,7 @@ class App extends Component {
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
     }).addTo(map)
-    
+
     setInterval(() => {
 
       const axiosConfig = {
@@ -54,7 +54,7 @@ class App extends Component {
           <div style={{display: 'flex', flexDirection: 'column', paddingLeft: '10px'}}>
             <div className='card'>
               <ResourceList
-                resources={this.state.resources}
+                resources={this.props.resources}
               />
             </div>
             <div className='card'>
