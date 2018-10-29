@@ -42,9 +42,3 @@ def testFindData():
     resources = []
     for x in col.find():
         print(x)
-
-def clearDb():
-    client = pymongo.MongoClient(DB_URL)
-    db = client[DB_NAME]
-    db.NodeData.delete_many({})
-#clearDb()

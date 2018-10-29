@@ -41,7 +41,7 @@ class App extends Component {
       .then(response =>{
         this.props.setMarkers(response.data, map)
       })
-    }, 5000);
+    }, 10000);
   }
 
 

@@ -14,7 +14,7 @@ def addData():
     while True:
         serialInput = ser.readline()
 
-        dataList = serialInput.split(",")
+        dataList = serialInput.decode("utf-8").split(",")
 
 
         dataList.pop()
@@ -31,10 +31,10 @@ def addData():
 # TODO: delete output
 def addError(id):
     if str(id) not in errors and str(id) != "":
-        print "adding: " + id + " to errors"
+        print("adding: " + id + " to errors")
         errors.append(id)
     else:
-        print "ID exists in errors OR ID not present."
+        print("ID exists in errors OR ID not present.")
 
 def sendData(data):
     entry = {
@@ -52,11 +52,11 @@ def sendData(data):
 
 def addQueue(data):
     if data[0] in errors:
-        print "adding right"
+        #print("adding right")
         errors.remove(data[0])
         q.append(data)
     else:
-        print "adding left"
+        #print("adding left")
         q.appendleft(data)
 
 def getQueue():
@@ -65,7 +65,7 @@ def getQueue():
             data = q.pop()
             sendData(data)
 
-ser = serial.Serial(port='/dev/cu.usbmodem14511', baudrate=9600)
+ser = serial.Serial(port='/dev/cu.usbmodem14101', baudrate=9600)
 
 # Start Threads
 t1 = threading.Thread(target=addData)
