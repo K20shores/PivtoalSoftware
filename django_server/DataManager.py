@@ -18,6 +18,7 @@ def writeData(entry):
 
 
 def findResources(request):
+    '''This for the reacts API'''
     try:
         client = pymongo.MongoClient(DB_URL)
         db = client[DB_NAME]
@@ -35,10 +36,12 @@ def findResources(request):
     except pymongo.errors.ConnectionFailure as e:
         print("Could not connect to server")
 
-def testFindData():
+def getResources():
+    '''This is for Steves parser'''
     client = pymongo.MongoClient(DB_URL)
     db = client[DB_NAME]
     col = db[DB_COLLECTION]
     resources = []
     for x in col.find():
-        print(x)
+        resources.append(x)
+    return resources

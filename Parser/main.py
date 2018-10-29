@@ -1,7 +1,7 @@
 from collections import deque
 import threading
 import datetime
-import DataManager
+from django_server.DataManager import DataManager
 import serial
 
 q = deque()

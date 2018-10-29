@@ -20,7 +20,5 @@ from . import DataManager
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/', DataManager.findResources, name='resources'),
-    # re_path('.*', TemplateView.as_view(template_name='index.html'))
-
+    path('api/', DataManager.findResources, name='resources')
 ]
