@@ -1,0 +1,23 @@
+\documentclass[border=10pt,png]{standalone}
+\usepackage{bytefield}
+
+\begin{document}
+
+%%%
+%%% Convert with the below command
+%%% convert -density 600 -quality 100 packet.pdf packet.png
+
+\begin{bytefield}{24}
+    \bitheader{0-23} \\
+    \bitbox{2}{Id}
+    & \bitbox{4}{Lat} 
+    & \bitbox{4}{Long} 
+    & \bitbox{4}{Alt} 
+    & \bitbox{1}{R} 
+    & \bitbox{1}{Q} 
+    & \bitbox{4}{Time} 
+    & \bitbox{4}{Unused} 
+    \\
+\end{bytefield}
+
+\end{document}

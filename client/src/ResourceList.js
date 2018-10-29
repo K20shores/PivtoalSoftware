@@ -8,8 +8,8 @@ const ResourceList = ({resources}) => (
         <Table striped bordered condensed hover>
             <thead>
                 <tr>
-                    <th>id</th>
-                    <th>Resource</th>
+                    <th>ID</th>
+                    <th>Resource</th> 
                     <th>Quantity</th>
 
                 </tr>

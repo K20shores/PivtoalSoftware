@@ -4,18 +4,32 @@ const DetailedList = ({Detaileds}) => (
     <div>
         <h2>Details</h2>
         <table >
-            <thead>
-            <tr>
-                <th>id</th>
-                <th>Distance</th>
-                <th>Quantity</th>
-                <th>Quantity</th>
-                <th>Lat/Long</th>
-                <th>Dist</th>
-                <th>More Info</th>
-            </tr>
-            </thead>
+            <tbody>
 
+                <tr>
+                    <td>ID</td><td>ID</td>
+                </tr>
+                <tr>
+                    <td>Distance</td><td>Distance</td>
+                </tr> 
+                <tr>
+                    <td>Quantity</td><td>Distance</td>
+                </tr>
+                <tr>
+                    <td>Quantity</td><td>Distance</td>
+                </tr>
+                <tr>
+                    <td>Lat/Long</td><td>Distance</td>
+                </tr>
+                <tr>
+                    <td>Dist</td><td>Distance</td>
+                </tr>
+                <tr>
+                    <td>More Info</td><td>Distance</td>
+                </tr>
+
+            </tbody>
+        
         </table>
     </div>
 )
