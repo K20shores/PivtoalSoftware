@@ -1,9 +1,9 @@
 import React from 'react';
 //import './style.css';
 import {Table} from 'react-bootstrap'
-const DetailedList = ({selectedResource}) => (
+const DetailedList = ({selectedResource, hideDetails}) => (
     <div>
-        <h2>Details</h2>
+        <h2>Details</h2><button onClick={hideDetails}>Hide</button>
         <Table striped bordered condensed hover>
             <tbody>
 
