@@ -1,47 +1,167 @@
+#include <Adafruit_GFX.h>
+#include <Adafruit_SSD1306.h>
 #include <TinyGPS++.h>
 #include <RH_RF95.h>
 #include <avr/dtostrf.h>
 
-// for feather m0  
+struct RadioPacket{
+  short ID;
+  unsigned long x;
+  unsigned long y;
+  unsigned long z;
+  char resource;
+  char quantity;
+  unsigned long timestamp;
+  unsigned long unused;
+} __attribute__((packed));
+
+//  Button input pins
+#define BUTTON_A 9
+#define BUTTON_B 6
+#define BUTTON_C 5
+
+// Feather M0 pins 
 #define RFM95_CS 8
 #define RFM95_RST 4
 #define RFM95_INT 3
- 
-// Change to 434.0 or other frequency, must match RX's freq!
 #define RF95_FREQ 915.0
- 
-// Singleton instance of the radio driver
+
+//  Instance of display
+Adafruit_SSD1306 display = Adafruit_SSD1306();
+#if (SSD1306_LCDHEIGHT != 32)
+ #error("Height incorrect, please fix Adafruit_SSD1306.h!");
+#endif
+
+//  Instance of radio driver
 RH_RF95 rf95(RFM95_CS, RFM95_INT);
 RH_RF95 * rf95ptr = &rf95;
 
+//  Instance of GPS
 TinyGPSPlus gps;
 
+//  Config
+unsigned short DEVICE_ID = 0x4944;
 #define LED 13
-#define PACKET_SIZE 60
-#define LONG_RANGE 0 // at a penalty of much lower bandwidth
-#define SEND_RATE 1000//  ms delay between sending
+#define PACKET_SIZE 24
+#define LONG_RANGE 0              // at a penalty of much lower bandwidth
+#define SEND_INTERVAL 5000        //  ms delay between sending
+#define NUMBER_OF_RESOURCES 3
+
+//  Globals
+int selected = 0;
+int resourceIndex = 0;
+int quantity = 0;
+int resourceIterator = 1337;
+unsigned long lastPacketSent = millis();
+const char *resources[NUMBER_OF_RESOURCES];
+
 
 void setup() {
+  //  Serial port
   Serial.begin(9600);
-  delay(3000);
-  Serial.println("Serial up");
+  //  GPS serial
   Serial1.begin(9600);
-  Serial.println("Serial for GPS up");
-
+  
+  InitializeButtons();
+  PopulateResourcesArray();
   SetUpRadio(rf95ptr);
-
-  // Overall setup OK
-  Serial.println("Set up finished.. entering loop");
+  InitializeDisplay();
+  
+  Serial.println("Set up finished... entering loop");
 }
 
 void loop() {
-  digitalWrite(LED, LOW);
-  delay(SEND_RATE);
-  digitalWrite(LED, HIGH);
 
-  char radioPacket[PACKET_SIZE];
-  memset(radioPacket, 0, PACKET_SIZE);
-  
+  if(selected == 0){
+    if(!digitalRead(BUTTON_A)){
+      resourceIterator += 1;
+    }
+    if(!digitalRead(BUTTON_B)){
+      resourceIterator -= 1;
+    }
+    if(!digitalRead(BUTTON_C)){
+      //  Start timer for packet sent 
+      lastPacketSent = millis();
+      selected = 1;
+    }
+
+    display.clearDisplay();
+    display.setCursor(0,0);
+    display.println("Choose a resource: ");
+    display.println(resources[resourceIterator % NUMBER_OF_RESOURCES]);
+    display.display();
+    
+  }
+  else if(selected == 1){
+    if(!digitalRead(BUTTON_A)){
+      if(quantity < 32){
+        quantity += 1;
+      }
+    }
+    if(!digitalRead(BUTTON_B)){
+      if(quantity > 0){
+        quantity -= 1;
+      }
+    }
+    if(!digitalRead(BUTTON_C)){
+      quantity = 0;
+      selected = 0;
+    }
+    
+    display.clearDisplay();
+    display.setCursor(0,0);
+    display.println("Selected: ");
+
+    display.println(resources[resourceIterator % NUMBER_OF_RESOURCES]);
+    
+    display.println();
+    display.print("Quantity: ");
+    display.println(quantity);
+    
+    display.display();
+
+    //  If SEND_INTERVAL has elapsed, construct packet and send
+    unsigned long currentTime = millis();
+    if((currentTime - lastPacketSent) > SEND_INTERVAL){
+      digitalWrite(LED, HIGH);
+
+      RadioPacket radioPacket;
+      memset(&radioPacket, 0, sizeof(RadioPacket));
+      radioPacket.ID = DEVICE_ID;
+      radioPacket.x = pack754(gps.location.lat());
+      radioPacket.y = pack754(gps.location.lng());
+      radioPacket.z = (unsigned long)gps.altitude.feet();
+      radioPacket.resource = resourceIterator % NUMBER_OF_RESOURCES;
+      radioPacket.quantity = quantity;
+      radioPacket.timestamp = gps.time.value();
+      radioPacket.unused = 0xFFFFFFFF;
+
+      uint8_t radioBuffer[sizeof(RadioPacket)];
+      memcpy(radioBuffer, &radioPacket, sizeof(RadioPacket));
+
+      Serial.print("radioPacket: ");
+      for(int i = 0; i < sizeof(RadioPacket); i++){
+        if(radioBuffer[i] < 16){
+          Serial.print(0, HEX);
+        }
+        Serial.print(radioBuffer[i], HEX);
+        Serial.print(" ");
+      }
+      Serial.println();
+
+      delay(10);
+      rf95.send((uint8_t *)radioBuffer, PACKET_SIZE);
+      Serial.print("Waiting for packet to complete... "); 
+      delay(10);
+      rf95.waitPacketSent();
+      Serial.println("Sent");
+      
+      lastPacketSent = currentTime;
+      digitalWrite(LED, LOW);
+    }
+  }
+
+  //  Capture GPS data
   if(Serial1.available())
   {
     while(Serial1.available() > 0){
@@ -49,27 +169,23 @@ void loop() {
       gps.encode(c);
     }
   }
+  
+  //  So button does not trigger multiple times per press
+  delay(80);
+}
 
-  char * id = "2";
-  char latBuffer[12];
-  dtostrf(gps.location.lat(), 8, 6, latBuffer);
-  char lngBuffer[12];
-  dtostrf(gps.location.lng(), 8, 6, lngBuffer);
-  char altBuffer[12];
-  itoa(gps.altitude.feet(), altBuffer, 10);
-  char * biometricData = "n/a";
-  char * severity = "n/a";
-  char * battery = "n/a";
-  char * tm = "n/a";
-  sprintf(radioPacket, "%s,%s,%s,%s,%s,%s,%s,%s", id, latBuffer, lngBuffer, altBuffer, biometricData, tm, battery, severity);
+void InitializeButtons(){
+  //  Initialize button inputs
+  pinMode(BUTTON_A, INPUT_PULLUP);
+  pinMode(BUTTON_B, INPUT_PULLUP);
+  pinMode(BUTTON_C, INPUT_PULLUP);
+}
 
-  Serial.print("Sending "); Serial.println(radioPacket);
-  delay(10);
-  rf95.send((uint8_t *)radioPacket, PACKET_SIZE);
-  Serial.print("Waiting for packet to complete... "); 
-  delay(10);
-  rf95.waitPacketSent();
-  Serial.println("Sent");
+void PopulateResourcesArray(){
+  //  Populate resources array with descriptions
+  resources[0] = "Search/rescue team";
+  resources[1] = "Medical team";
+  resources[2] = "Ambulance";
 }
 
 void SetUpRadio(RH_RF95 * rf95){
@@ -117,3 +233,51 @@ void SetUpRadio(RH_RF95 * rf95){
   //////               //////
   Serial.println("Radio set up complete");
 }
+
+void InitializeDisplay(){
+  //  Initialize screen with I2C addr 0x3C (for the 128x32)
+  display.begin(SSD1306_SWITCHCAPVCC, 0x3C);
+
+  //  Display splashscreen, buffered on initialization
+  display.display();
+  delay(1000);
+
+  // Clear the buffer.
+  display.clearDisplay();
+  display.display();
+
+  //  Display text config
+  display.setTextSize(1);
+  display.setTextColor(WHITE);
+  display.setCursor(0,0);
+}
+
+uint32_t pack754(double f)
+{
+  long double fnorm;
+  int shift;
+  long long sign, exp, significand;
+  unsigned significandbits = 32 - 8 - 1; // -1 for sign bit
+
+  if (f == 0.0) return 0; // get this special case out of the way
+
+  // check sign and begin normalization
+  if (f < 0) { sign = 1; fnorm = -f; }
+  else { sign = 0; fnorm = f; }
+
+  // get the normalized form of f and track the exponent
+  shift = 0;
+  while(fnorm >= 2.0) { fnorm /= 2.0; shift++; }
+  while(fnorm < 1.0) { fnorm *= 2.0; shift--; }
+  fnorm = fnorm - 1.0;
+
+  // calculate the binary form (non-float) of the significand data
+  significand = fnorm * ((1LL<<significandbits) + 0.5f);
+
+  // get the biased exponent
+  exp = shift + ((1<<(8-1)) - 1); // shift + bias
+
+  // return the final answer
+  return (sign<<(32-1)) | (exp<<(32-8-1)) | significand;
+}
+
