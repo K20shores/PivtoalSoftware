@@ -43,15 +43,15 @@ TinyGPSPlus gps;
 unsigned short DEVICE_ID = 0x4944;
 #define LED 13
 #define PACKET_SIZE 24
-#define LONG_RANGE 0              // at a penalty of much lower bandwidth
+#define LONG_RANGE 0              //  at a penalty of much lower bandwidth
 #define SEND_INTERVAL 5000        //  ms delay between sending
-#define NUMBER_OF_RESOURCES 3
+#define NUMBER_OF_RESOURCES 5
 
 //  Globals
 int selected = 0;
 int resourceIndex = 0;
 int quantity = 0;
-int resourceIterator = 1337;
+int resourceIterator = 1337 * NUMBER_OF_RESOURCES;  //  start as multiple of resource number
 unsigned long lastPacketSent = millis();
 const char *resources[NUMBER_OF_RESOURCES];
 
@@ -171,7 +171,7 @@ void loop() {
   }
   
   //  So button does not trigger multiple times per press
-  delay(100);
+  delay(80);
 }
 
 void InitializeButtons(){
@@ -186,6 +186,8 @@ void PopulateResourcesArray(){
   resources[0] = "Search/rescue team";
   resources[1] = "Medical team";
   resources[2] = "Ambulance";
+  resources[3] = "Wood";
+  resources[4] = "Water";
 }
 
 void SetUpRadio(RH_RF95 * rf95){
