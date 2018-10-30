@@ -171,7 +171,7 @@ void loop() {
   }
   
   //  So button does not trigger multiple times per press
-  delay(80);
+  delay(100);
 }
 
 void InitializeButtons(){
