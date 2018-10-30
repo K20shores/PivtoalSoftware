@@ -58,18 +58,18 @@ void loop() {
   //  Report self GPS every SELF_REPORT_INTERVAL seconds
   time_t currentTime = millis();
   if((currentTime - lastSelfReport) > SELF_REPORT_INTERVAL){
-    //reportSelfPositioning(gps);
+    reportSelfPositioning(gps);
     lastSelfReport = currentTime;
   }
 
   //  Send sync packet to other gateways if told to
   if(Serial.available()){
-    
-    
+
+    //  Create two dimensional array so we can send multiple packets of PACKET_SIZE
     uint8_t gatewaySyncBuffer[128][PACKET_SIZE];
     memset(gatewaySyncBuffer, 0, sizeof(uint8_t) * 128 * PACKET_SIZE);
 
-    //  int bytesRead = Serial.readBytes(gatewaySyncBuffer, PACKET_SIZE * 128);
+    //  Populate radio packets in buffer
     int iterator = 0;
     while(Serial.available()){
       uint8_t c = Serial.read();
@@ -80,16 +80,17 @@ void loop() {
 //    for(int i = 0; i < iterator; i++){
 //      Serial.print(gatewaySyncBuffer[i]);
 //    }
-    Serial.println(iterator);
+//    Serial.println(iterator);
 
+    //  Send all constructed packets
+    digitalWrite(LED, HIGH);
     for(int i = 0; i < iterator / PACKET_SIZE; i++){
-      digitalWrite(LED, HIGH);
       rf95.send((uint8_t *)gatewaySyncBuffer[i], PACKET_SIZE);
       delay(10);
       rf95.waitPacketSent();
       delay(10);
-      digitalWrite(LED, LOW);
     }
+    digitalWrite(LED, LOW);
     
   
     
@@ -134,17 +135,17 @@ void reportSelfPositioning(TinyGPSPlus gps){
   radioPacket.timestamp = gps.time.value();
   radioPacket.unused = 0xFFFFFFFF;
 
-  uint8_t radioBuffer[sizeof(RadioPacket)];
+  char radioBuffer[sizeof(RadioPacket)];
   memcpy(radioBuffer, &radioPacket, sizeof(RadioPacket));
 
   for(int i = 0; i < sizeof(RadioPacket); i++){
-    if(radioBuffer[i] < 16){
+    if(radioBuffer[i] < 0x10){
       Serial.print(0, HEX);
     }
     Serial.print(radioBuffer[i], HEX);
     Serial.print(" ");
   }
-  Serial.println();
+  //Serial.println();
 
 }
 

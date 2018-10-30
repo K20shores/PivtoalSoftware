@@ -20,7 +20,7 @@ while(1):
     time.sleep(0.5);
 
 #   Create serial port with open port
-ser = serial.Serial(serialPorts[portIndex % len(serialPorts)], timeout=0);
+ser = serial.Serial(serialPorts[portIndex % len(serialPorts)], timeout=0.05);
 
 
 lastTime = time.time()
@@ -28,13 +28,15 @@ lastTime = time.time()
 #   to serial and share what we know to be broadcast out
 while(1):
     #   Here is where we would receive serial input and process
-    line = ser.readline()
+
+    line = ser.readline().decode('utf-8')
     if line:
         print(line)
 
+
     currentTime = time.time()
     if (currentTime - lastTime) > 8:
-        print('sending')
+        #print('sending')
         ##
         #   This is where we would write the contents of the nodes
         #   we are aware of, sharing what we know. When the gateway
