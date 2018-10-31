@@ -9,17 +9,45 @@ DB_URL = 'mongodb://localhost:27017'
 DB_NAME = 'PIVOTAL_DB'
 DB_COLLECTION = 'NodeData'
 
+def deleteAll():
+    client = pymongo.MongoClient(DB_URL)
+    db = client[DB_NAME]
+    col = db[DB_COLLECTION]
+
+    x = col.delete_many({})
+
+def alreadyExists(nID):
+    client = pymongo.MongoClient(DB_URL)
+    db = client[DB_NAME]
+    col = db[DB_COLLECTION]
+
+    if col.find({'nodeID': nID}).count() > 0:
+        return True
+    else:
+        return False
+
 def writeData(entry):
     try:
         client = pymongo.MongoClient(DB_URL)
         db = client[DB_NAME]
         col = db[DB_COLLECTION]
 
-        col.insert_one(entry)
+        #if you don't find matching entry, insert new
+        #else delete found and insert new.
+        id = entry['nodeID']
+        if alreadyExists(id):
+             x = col.delete_many({"nodeID": id})
+             y = col.insert_one(entry)
+             print("updated entry")
+        else:
+             z = col.insert_one(entry)
+             print("inserted entry")
+
     except pymongo.errors.ConnectionFailure as e:
         print("Could not connect to server")
 
-def findResources():
+def findResources(request):
+    '''This for the reacts API'''
     try:
         client = pymongo.MongoClient(DB_URL)
         db = client[DB_NAME]
@@ -72,10 +100,10 @@ def addData():
 # TODO: delete output
 def addError(id):
     if str(id) not in errors and str(id) != "":
-        print "adding: " + id + " to errors"
+        print("adding: " + id + " to errors")
         errors.append(id)
     else:
-        print "ID exists in errors OR ID not present."
+        print("ID exists in errors OR ID not present.")
 
 def sendData(data):
     entry = {
@@ -92,11 +120,11 @@ def sendData(data):
 
 def addQueue(data):
     if data[0] in errors:
-        print "adding right"
+        print("adding right")
         errors.remove(data[0])
         q.append(data)
     else:
-        print "adding left"
+        print("adding left")
         q.appendleft(data)
 
 def getQueue():
