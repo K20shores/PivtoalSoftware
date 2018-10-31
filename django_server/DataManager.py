@@ -14,7 +14,6 @@ def deleteAll():
     col = db[DB_COLLECTION]
 
     x = col.delete_many({})
-
 def alreadyExists(nID):
     client = pymongo.MongoClient(DB_URL)
     db = client[DB_NAME]
@@ -89,7 +88,7 @@ def addData():
         dataList.pop()
 
         # TODO: Need one more case for data types
-        if len(dataList) != 7:
+        if len(dataList) != 8:
             addError(dataList[0])
         elif "" in dataList:
             addError(dataList[0])
@@ -115,7 +114,7 @@ def sendData(data):
         "time" : data[6]
     }
 
-    DataManager.writeData(entry)
+    writeData(entry)
 
 def addQueue(data):
     if data[0] in errors:
@@ -141,5 +140,3 @@ t2 = threading.Thread(target=getQueue)
 t1.start()
 t2.start()
 
-t1.join()
-t2.join()
