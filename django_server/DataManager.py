@@ -2,7 +2,6 @@ import pymongo
 from django.http import JsonResponse
 from collections import deque
 import threading
-import DataManager
 import serial
 
 DB_URL = 'mongodb://localhost:27017'
@@ -85,7 +84,7 @@ def addData():
     while True:
         serialInput = ser.readline()
 
-        dataList = serialInput.split(",")
+        dataList = serialInput.decode("utf-8").split(",")
 
         dataList.pop()
 
@@ -133,7 +132,7 @@ def getQueue():
             data = q.pop()
             sendData(data)
 
-ser = serial.Serial(port='/dev/cu.usbmodem14511', baudrate=9600)
+ser = serial.Serial(port='/dev/cu.usbmodem14101', baudrate=9600)
 
 # Start Threads
 t1 = threading.Thread(target=addData)
