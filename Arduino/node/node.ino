@@ -139,7 +139,7 @@ void loop() {
       uint8_t radioBuffer[sizeof(RadioPacket)];
       memcpy(radioBuffer, &radioPacket, sizeof(RadioPacket));
 
-      Serial.print("radioPacket: ");
+      //Serial.print("radioPacket: ");
       for(int i = 0; i < sizeof(RadioPacket); i++){
         if(radioBuffer[i] < 16){
           Serial.print(0, HEX);

@@ -34,23 +34,23 @@ while(1):
         print(line)
 
 
-    currentTime = time.time()
-    if (currentTime - lastTime) > 8:
-        #print('sending')
-        ##
-        #   This is where we would write the contents of the nodes
-        #   we are aware of, sharing what we know. When the gateway
-        #   receives this, it'll broadcast it out.
-        ##
-        values = bytearray([37, 13, 33, 33, 34, 00, 00, 00, 00, 00, 00, 00, 00, 00, 0xFF, 0xFF, 00, 00, 00, 00, 0xFF, 0xFF, 0xFF, 0xFF,
-        37, 13, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 0xFF, 0xFF, 00, 00, 00, 00, 0xFF, 0xFF, 0xFF, 0xFF,
-        37, 13, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 0xFF, 0xFF, 00, 00, 00, 00, 0xFF, 0xFF, 0xFF, 0xFF,
-        37, 13, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 0xFF, 0xFF, 00, 00, 00, 00, 0xFF, 0xFF, 0xFF, 0xFF,
-        37, 13, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 0xFF, 0xFF, 00, 00, 00, 00, 0xFF, 0xFF, 0xFF, 0xFF,
-        37, 13, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 0xFF, 0xFF, 00, 00, 00, 00, 0xFF, 0xFF, 0xFF, 0xFF,
-        37, 13, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 0xFF, 0xFF, 00, 00, 00, 00, 0xFF, 0xFF, 0xFF, 0xFF,
-        37, 13, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 0xFF, 0xFF, 00, 00, 00, 00, 0xFF, 0xFF, 0xFF, 0xFF,
-        37, 13, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 0xFF, 0xFF, 00, 00, 00, 00, 0xFF, 0xFF, 0xFF, 0xFF,
-        37, 13, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 0xFF, 0xFF, 00, 00, 00, 00, 0xFF, 0xFF, 0xFF, 0xFF])
-        ser.write(values)
-        lastTime = currentTime
+    # currentTime = time.time()
+    # if (currentTime - lastTime) > 8:
+    #     #print('sending')
+    #     ##
+    #     #   This is where we would write the contents of the nodes
+    #     #   we are aware of, sharing what we know. When the gateway
+    #     #   receives this, it'll broadcast it out.
+    #     ##
+    #     values = bytearray([37, 13, 33, 33, 34, 00, 00, 00, 00, 00, 00, 00, 00, 00, 0xFF, 0xFF, 00, 00, 00, 00, 0xFF, 0xFF, 0xFF, 0xFF,
+    #     37, 13, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 0xFF, 0xFF, 00, 00, 00, 00, 0xFF, 0xFF, 0xFF, 0xFF,
+    #     37, 13, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 0xFF, 0xFF, 00, 00, 00, 00, 0xFF, 0xFF, 0xFF, 0xFF,
+    #     37, 13, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 0xFF, 0xFF, 00, 00, 00, 00, 0xFF, 0xFF, 0xFF, 0xFF,
+    #     37, 13, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 0xFF, 0xFF, 00, 00, 00, 00, 0xFF, 0xFF, 0xFF, 0xFF,
+    #     37, 13, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 0xFF, 0xFF, 00, 00, 00, 00, 0xFF, 0xFF, 0xFF, 0xFF,
+    #     37, 13, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 0xFF, 0xFF, 00, 00, 00, 00, 0xFF, 0xFF, 0xFF, 0xFF,
+    #     37, 13, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 0xFF, 0xFF, 00, 00, 00, 00, 0xFF, 0xFF, 0xFF, 0xFF,
+    #     37, 13, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 0xFF, 0xFF, 00, 00, 00, 00, 0xFF, 0xFF, 0xFF, 0xFF,
+    #     37, 13, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 0xFF, 0xFF, 00, 00, 00, 00, 0xFF, 0xFF, 0xFF, 0xFF])
+    #     ser.write(values)
+    #     lastTime = currentTime

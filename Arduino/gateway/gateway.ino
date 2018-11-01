@@ -32,10 +32,12 @@ unsigned short DEVICE_ID = 0x1337;
 #define PACKET_SIZE 24
 #define LONG_RANGE 0                    //  at a penalty of much lower bandwidth
 #define SELF_REPORT_INTERVAL 5000
+#define DATABASE_DUMP_INTERVAL 12000
 #define NUMBER_OF_RESOURCES 5
 
 //  Globals
 time_t lastSelfReport = millis();
+time_t lastDatabaseDump = millis();
 
 void setup() {
   // put your setup code here, to run once:
@@ -62,39 +64,53 @@ void loop() {
     lastSelfReport = currentTime;
   }
 
-  //  Send sync packet to other gateways if told to
-  if(Serial.available()){
+  if((currentTime - lastDatabaseDump) > DATABASE_DUMP_INTERVAL){
+    uint8_t requestDumpPacket[PACKET_SIZE];
+    memset(requestDumpPacket, 0xFF, PACKET_SIZE);
 
-    //  Create two dimensional array so we can send multiple packets of PACKET_SIZE
-    uint8_t gatewaySyncBuffer[128][PACKET_SIZE];
-    memset(gatewaySyncBuffer, 0, sizeof(uint8_t) * 128 * PACKET_SIZE);
-
-    //  Populate radio packets in buffer
-    int iterator = 0;
-    while(Serial.available()){
-      uint8_t c = Serial.read();
-      gatewaySyncBuffer[iterator / PACKET_SIZE][iterator % PACKET_SIZE] = c;
-      iterator++;
+    for(int i = 0; i < PACKET_SIZE; i++){
+      if(requestDumpPacket[i] < 0x10){
+        Serial.print(0, HEX);
+      }
+      Serial.print(requestDumpPacket[i], HEX);
+      Serial.print(" ");
     }
-  
-//    for(int i = 0; i < iterator; i++){
-//      Serial.print(gatewaySyncBuffer[i]);
-//    }
-//    Serial.println(iterator);
 
-    //  Send all constructed packets
-    digitalWrite(LED, HIGH);
-    for(int i = 0; i < iterator / PACKET_SIZE; i++){
-      rf95.send((uint8_t *)gatewaySyncBuffer[i], PACKET_SIZE);
-      delay(10);
-      rf95.waitPacketSent();
-      delay(10);
-    }
-    digitalWrite(LED, LOW);
-    
+    delay(100);
+
+    //  Send sync packet to other gateways if told to
+    if(Serial.available()){
   
+      //  Create two dimensional array so we can send multiple packets of PACKET_SIZE
+      uint8_t gatewaySyncBuffer[128][PACKET_SIZE];
+      memset(gatewaySyncBuffer, 0, sizeof(uint8_t) * 128 * PACKET_SIZE);
+  
+      //  Populate radio packets in buffer
+      int iterator = 0;
+      while(Serial.available()){
+        uint8_t c = Serial.read();
+        gatewaySyncBuffer[iterator / PACKET_SIZE][iterator % PACKET_SIZE] = c;
+        iterator++;
+      }
     
+  //    for(int i = 0; i < iterator; i++){
+  //      Serial.print(gatewaySyncBuffer[i]);
+  //    }
+  //    Serial.println(iterator);
+  
+      //  Send all constructed packets
+      digitalWrite(LED, HIGH);
+      for(int i = 0; i < iterator / PACKET_SIZE; i++){
+        rf95.send((uint8_t *)gatewaySyncBuffer[i], PACKET_SIZE);
+        delay(10);
+        rf95.waitPacketSent();
+        delay(10);
+      }
+      digitalWrite(LED, LOW);
+    }
+    lastDatabaseDump = currentTime;
   }
+
 
   //  Receive incoming packets, print to serial
   if(rf95.available()){
@@ -111,7 +127,7 @@ void loop() {
         Serial.print(buf[i], HEX);
         Serial.print(" ");
       }
-      Serial.println();
+      //Serial.println();
   
       digitalWrite(LED, LOW);
     }
