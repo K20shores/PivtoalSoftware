@@ -77,3 +77,8 @@ table{
 #resource > div{
   margin-bottom: 50px
 }
+
+
+.leaflet-popup-content-wrapper{
+  font-size: large;
+}

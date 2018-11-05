@@ -44,7 +44,10 @@ class App extends Component {
       })
     }, 10000);
   }
-
+ handlePopover = (nodeID) => {
+   console.log('hello',nodeID)
+   this.props.markers[nodeID].openPopup();
+ }
 
   render() {
     return (
@@ -56,6 +59,7 @@ class App extends Component {
             <div className='card'>
               <ResourceList
                 resources={this.props.resources}
+                popOver={this.handlePopover}
               />
             </div>
 
@@ -69,7 +73,8 @@ class App extends Component {
 }
 const mapStateToProps = state => {
   return {
-    resources: state.resources.resources
+    resources: state.resources.resources,
+    markers: state.resources.markers
   }
 }
 export default connect(mapStateToProps,{setMarkers})(App);

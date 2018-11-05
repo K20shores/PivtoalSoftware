@@ -1,7 +1,7 @@
 import React from 'react';
 // import './style.css';
 import {Table} from 'react-bootstrap'
-const ResourceList = ({resources}) => (
+const ResourceList = ({resources, popOver}) => (
     <div>
         <h2>Resources</h2>
         <Table striped bordered condensed hover>
@@ -17,7 +17,7 @@ const ResourceList = ({resources}) => (
 
             <tbody>
                 {resources && resources.map(r => (
-                    <tr key={r.nodeID}>
+                    <tr key={r.nodeID} onClick={() => popOver(r.nodeID)}>
                         <td>{r.nodeID}</td>
                         <td>{r.resource_type}</td>
                         <td>{r.resource_amount}</td>

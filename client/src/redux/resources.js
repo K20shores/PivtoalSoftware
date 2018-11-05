@@ -15,6 +15,22 @@ export default function reducer(state = INITIAL_STATE, action = {}){
             }
 
             let newMarkers = {}
+            // let resources = [
+            //   {
+            //     "nodeID": 1,
+            //     "x_coord": 30.628,
+            //     "y_coord": -96.334,
+            //     "resource_type": 'water',
+            //     "resource_amount": 5
+            //   },
+            //   {
+            //     "nodeID": 2,
+            //     "x_coord": 30.629,
+            //     "y_coord": -96.334,
+            //     "resource_type": 'bread',
+            //     "resource_amount": 5
+            //   }
+            // ]
             action.resources.forEach( resource => {
                 resource['location'] = {
                     'lat': resource.x_coord,
@@ -25,10 +41,12 @@ export default function reducer(state = INITIAL_STATE, action = {}){
                 console.log(resource);
                 //console.log(m,action.map);
                 m.addTo(action.map)
-                m.bindPopup(`${resource.name}<br> Easily customizable.`)
-                newMarkers[resource.id] = m;
+                m.bindPopup(`Type: ${resource.resource_type}<br>
+                  Amount:  ${resource.resource_amount} <br>
+                  Lat/Long: ${resource.x_coord}/${resource.y_coord}`)
+                newMarkers[resource.nodeID] = m;
             })
-            return {...state, markers: action.markers, resources: action.resources}
+            return {...state, markers: newMarkers, resources: action.resources}
         }
         default: return state;
     }
