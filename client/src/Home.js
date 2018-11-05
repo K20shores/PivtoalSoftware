@@ -58,11 +58,6 @@ class App extends Component {
                 resources={this.props.resources}
               />
             </div>
-            <div className='card'>
-              <DetailedList
-                selectedResource = {this.state.selectedResource}
-              />
-            </div>
 
           </div>
 

@@ -8,11 +8,10 @@ const DetailedList = ({selectedResource, hideDetails}) => (
             <thead>
               <tr>
                 <th>ID</th>
-                <th>Distance</th>
+                <th>Type</th>
                 <th>Quantity</th>
                 <th>Lat</th>
                 <th>Lon</th>
-                <th>More Info</th>
               </tr>
             </thead>
             <tbody>
@@ -27,7 +26,7 @@ const DetailedList = ({selectedResource, hideDetails}) => (
                   <td>{selectedResource.x_coord}</td>
                   <td>{selectedResource.y_coord}</td>
 
-                  <td>{selectedResource.x_coord}</td>
+
                 </tr>
 
             </tbody>
