@@ -3,6 +3,8 @@ from django.http import JsonResponse
 from collections import deque
 import threading
 import serial
+import struct
+import binascii
 
 DB_URL = 'mongodb://localhost:27017'
 DB_NAME = 'PIVOTAL_DB'
@@ -77,23 +79,117 @@ q = deque()
 errors = []
 jsonList = []
 
-#TODO: change code to reflect pivot.
+def sendDatabase():
+
+    databaseList = getResources()
+    for i in databaseList:
+        encoder(i)
+
+def encoder(dataDict):
+    #TODO: get below vars from dataDict
+    print dataDict
+    ID = dataDict["nodeID"]
+    x = dataDict["x_coord"]
+    y = dataDict["y_coord"]
+    z = dataDict["z_coord"]
+    resource = dataDict["resource_type"]
+    quantity = dataDict["resource_amount"]
+    time = dataDict["time"].split(':')
+
+    print dataDict["time"]
+
+    print ID
+    ID = struct.pack('<h', ID)
+    x = struct.pack('<f', x)
+    y = struct.pack('<f', y)
+    z = struct.pack('<I', z)
+    resource = struct.pack('<b', resource)
+    quantity = struct.pack('<b', quantity)
+    CC = b'\xcc'
+    hour = struct.pack('<b', int(time[0]))
+    minute = struct.pack('<b', int(time[1]))
+    second = struct.pack('<b', int(time[2]))
+    FF = b'\xff'
+
+    byte_str = b""
+    byte_str += ID
+    byte_str += x
+    byte_str += y
+    byte_str += z
+    byte_str += resource
+    byte_str += quantity
+    byte_str += CC
+    byte_str += hour
+    byte_str += minute
+    byte_str += second
+    byte_str += FF
+    byte_str += FF
+    byte_str += FF
+    byte_str += FF
+
+    print binascii.hexlify(byte_str)
+
+    '''
+    byte_str = ID+x+y+z+resource+quantity+CC+second+minute+hour+FF+FF+FF+FF
+    '''
+    byte_arr = bytearray(byte_str)
+
+    #TODO: switch to ser.write(byte_str)
+    ser.write(byte_arr)
+
+def decoder(hex_str):
+    byte_str = bytearray.fromhex(hex_str)
+
+    if hex_str[57:59] == "FF":
+        sendDatabase()
+        return
+
+    dataList = []
+
+    dataList.append(struct.unpack('<h', byte_str[0:2])[0])
+    dataList.append(struct.unpack('<f', byte_str[2:6])[0])
+    dataList.append(struct.unpack('<f', byte_str[6:10])[0])
+    dataList.append(struct.unpack('<I', byte_str[10:14])[0])
+    dataList.append(struct.unpack('<b', byte_str[14:15])[0])
+    dataList.append(struct.unpack('<b', byte_str[15:16])[0])
+
+
+    second = struct.unpack('<b', byte_str[17:18])[0]
+    minute = struct.unpack('<b', byte_str[18:19])[0]
+    #hour = struct.unpack('<b', byte_str[19:20])[0]
+
+
+
+    hour = hex_str[57:59]
+    '''
+    minute = hex_str[54:56]
+    second = hex_str[51:53]
+    '''
+
+
+    #print second + minute + hour
+
+    time = str(hour) + ':' + str(minute) + ':' + str(second)
+    print time
+    dataList.append(time)
+
+    return dataList
+
 
 def addData():
     while True:
         serialInput = ser.readline()
+        if serialInput:
+            dataList = decoder(serialInput)
 
-        dataList = serialInput.decode("utf-8").split(",")
-
-        dataList.pop()
-
-        # TODO: Need one more case for data types
-        if len(dataList) != 8:
-            addError(dataList[0])
-        elif "" in dataList:
-            addError(dataList[0])
-        else:
-            addQueue(dataList)
+            if dataList is not None:
+                if len(dataList) != 7:
+                    if len(dataList) >= 1:
+                        addError(dataList[0])
+                elif "" in dataList:
+                    addError(dataList[0])
+                else:
+                    addQueue(dataList)
 
 # TODO: delete output
 def addError(id):
@@ -114,6 +210,8 @@ def sendData(data):
         "time" : data[6]
     }
 
+    print "ent: ", entry
+
     writeData(entry)
 
 def addQueue(data):
@@ -131,7 +229,9 @@ def getQueue():
             data = q.pop()
             sendData(data)
 
-ser = serial.Serial(port='/dev/cu.usbmodem14101', baudrate=9600)
+ser = serial.Serial(port='/dev/cu.usbmodem14521', baudrate=9600, timeout=0.05)
+
+deleteAll()
 
 # Start Threads
 t1 = threading.Thread(target=addData)
@@ -139,4 +239,3 @@ t2 = threading.Thread(target=getQueue)
 
 t1.start()
 t2.start()
-
