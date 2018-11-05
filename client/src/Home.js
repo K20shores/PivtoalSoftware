@@ -7,7 +7,7 @@ import L from 'leaflet'
 
 import {connect} from 'react-redux'
 import {setMarkers} from './redux/resources'
-
+import './style.css'
 class App extends Component {
   constructor(props){
     super(props);
@@ -50,9 +50,9 @@ class App extends Component {
     return (
       <div>
 
-        <div style={{display: 'flex', flexDirection: 'row'}}>
-          <div style={ { width: '720px', height: '960px' }} id="mapid"></div>
-          <div style={{display: 'flex', flexDirection: 'column', paddingLeft: '10px'}}>
+        <div style={{display: 'flex', flexDirection: 'row', backgroundColor: '#f1ecec'}}>
+          <div id="mapid"></div>
+          <div id="resource">
             <div className='card'>
               <ResourceList
                 resources={this.props.resources}

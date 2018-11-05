@@ -3,30 +3,31 @@ import React from 'react';
 import {Table} from 'react-bootstrap'
 const DetailedList = ({selectedResource, hideDetails}) => (
     <div>
-        <h2>Details</h2><button onClick={hideDetails}>Hide</button>
+        <h2>D E T A I L S</h2><button onClick={hideDetails}>Hide</button>
         <Table striped bordered condensed hover>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Distance</th>
+                <th>Quantity</th>
+                <th>Lat</th>
+                <th>Lon</th>
+                <th>More Info</th>
+              </tr>
+            </thead>
             <tbody>
 
                 <tr>
-                    <td>ID</td><td>{selectedResource.id}</td>
-                </tr>
-                <tr>
-                    <td>Distance</td><td>Distance</td>
-                </tr>
-                <tr>
-                    <td>Quantity</td><td>Distance</td>
-                </tr>
-                <tr>
-                    <td>Quantity</td><td>Distance</td>
-                </tr>
-                <tr>
-                    <td>Lat/Long</td><td>Distance</td>
-                </tr>
-                <tr>
-                    <td>Dist</td><td>Distance</td>
-                </tr>
-                <tr>
-                    <td>More Info</td><td>Distance</td>
+                  <td>{selectedResource.id}</td>
+
+                  <td>{selectedResource.x_coord}</td>
+
+                  <td>{selectedResource.resource_amount}</td>
+
+                  <td>{selectedResource.x_coord}</td>
+                  <td>{selectedResource.y_coord}</td>
+
+                  <td>{selectedResource.x_coord}</td>
                 </tr>
 
             </tbody>
