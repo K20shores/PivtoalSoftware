@@ -31,6 +31,7 @@ def writeData(entry):
         client = pymongo.MongoClient(DB_URL)
         db = client[DB_NAME]
         col = db[DB_COLLECTION]
+        print("entry: ", entry)
 
         #if you don't find matching entry, insert new
         #else delete found and insert new.
@@ -38,10 +39,10 @@ def writeData(entry):
         if alreadyExists(id):
              x = col.delete_many({"nodeID": id})
              y = col.insert_one(entry)
-             print("updated entry")
+             #print("updated entry")
         else:
              z = col.insert_one(entry)
-             print("inserted entry")
+             #print("inserted entry")
 
     except pymongo.errors.ConnectionFailure as e:
         print("Could not connect to server")
@@ -57,7 +58,7 @@ def findResources(request):
             cleanX = x
             cleanX["_id"] = str(x["_id"])
             resources.append(cleanX)
-            print(x)
+            #print(x)
         res = JsonResponse(resources, safe=False)
         res["Access-Control-Allow-Origin"] = "*"
         res["Access-Control-Allow-Methods"] = "GET"
@@ -87,7 +88,7 @@ def sendDatabase():
 
 def encoder(dataDict):
     #TODO: get below vars from dataDict
-    print(dataDict)
+    #print(dataDict)
     ID = dataDict["nodeID"]
     x = dataDict["x_coord"]
     y = dataDict["y_coord"]
@@ -96,9 +97,9 @@ def encoder(dataDict):
     quantity = dataDict["resource_amount"]
     time = dataDict["time"].split(':')
 
-    print(dataDict["time"])
+    #print(dataDict["time"])
 
-    print(ID)
+    #print(ID)
     ID = struct.pack('<h', ID)
     x = struct.pack('<f', x)
     y = struct.pack('<f', y)
@@ -127,7 +128,7 @@ def encoder(dataDict):
     byte_str += FF
     byte_str += FF
 
-    print(binascii.hexlify(byte_str))
+    #print(binascii.hexlify(byte_str))
 
     '''
     byte_str = ID+x+y+z+resource+quantity+CC+second+minute+hour+FF+FF+FF+FF
@@ -170,7 +171,7 @@ def decoder(hex_str):
     #print second + minute + hour
 
     time = str(hour) + ':' + str(minute) + ':' + str(second)
-    print(time)
+    #print(time)
     dataList.append(time)
 
     return dataList
@@ -194,7 +195,7 @@ def addData():
 # TODO: delete output
 def addError(id):
     if str(id) not in errors and str(id) != "":
-        print("adding: " + id + " to errors")
+        #print("adding: " + id + " to errors")
         errors.append(id)
     else:
         print("ID exists in errors OR ID not present.")
@@ -210,17 +211,17 @@ def sendData(data):
         "time" : data[6]
     }
 
-    print("ent: ", entry)
+    #print("ent: ", entry)
 
     writeData(entry)
 
 def addQueue(data):
     if data[0] in errors:
-        print("adding right")
+        #print("adding right")
         errors.remove(data[0])
         q.append(data)
     else:
-        print("adding left")
+        #print("adding left")
         q.appendleft(data)
 
 def getQueue():
