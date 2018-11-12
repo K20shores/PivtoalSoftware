@@ -1,7 +1,7 @@
 import React from 'react';
 // import './style.css';
 import {Table} from 'react-bootstrap'
-const ResourceList = ({resources, popOver}) => (
+const ResourceList = ({resources, showDetails}) => (
     <div>
         <h2>Resources</h2>
         <Table striped bordered condensed hover>
@@ -16,13 +16,11 @@ const ResourceList = ({resources, popOver}) => (
             </thead>
 
             <tbody>
-                {resources && resources.map(r => (
-                    <tr key={r.nodeID} onClick={() => popOver(r.nodeID)}>
-                        <td>{r.nodeID}</td>
-                        <td>{r.resource_type}</td>
-                        <td>{r.resource_amount}</td>
-                        <td>{r.x_coord}</td>
-                        <td>{r.y_coord}</td>
+                {resources && resources.map((r,index) => (
+                    <tr key={r.id} onClick={() => showDetails(index)}>
+                        <td>{r.id}</td>
+                        <td>{r.name}</td>
+                        <td>{r.quantity}</td>
                     </tr>
                 ))}
             </tbody>

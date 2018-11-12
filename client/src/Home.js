@@ -15,7 +15,7 @@ class App extends Component {
       resources: [],
       markers: [],
       map: null,
-      selectedResource: {}
+      selectedResource: null
     }
     // this.setMarkers = this.setMarkers.bind(this)
   }
@@ -44,11 +44,12 @@ class App extends Component {
       })
     }, 10000);
   }
- handlePopover = (nodeID) => {
-   console.log('hello',nodeID)
-   this.props.markers[nodeID].openPopup();
- }
-
+  showDetails = (i) => {
+    this.setState({selectedResource: this.state.resources[i]})
+  }
+  hideDetails = () => {
+    this.setState({selectedResource: null})
+  }
   render() {
     return (
       <div>
@@ -59,8 +60,16 @@ class App extends Component {
             <div className='card'>
               <ResourceList
                 resources={this.props.resources}
-                popOver={this.handlePopover}
+                showDetails = {this.showDetails}
               />
+            </div>
+            <div className='card'>
+              { this.state.selectedResource && 
+                <DetailedList
+                  selectedResource = {this.state.selectedResource}
+                  hideDetails = {this.hideDetails}
+                />
+              }
             </div>
 
           </div>
