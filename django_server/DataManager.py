@@ -87,7 +87,7 @@ def sendDatabase():
 
 def encoder(dataDict):
     #TODO: get below vars from dataDict
-    print dataDict
+    print(dataDict)
     ID = dataDict["nodeID"]
     x = dataDict["x_coord"]
     y = dataDict["y_coord"]
@@ -96,9 +96,9 @@ def encoder(dataDict):
     quantity = dataDict["resource_amount"]
     time = dataDict["time"].split(':')
 
-    print dataDict["time"]
+    print(dataDict["time"])
 
-    print ID
+    print(ID)
     ID = struct.pack('<h', ID)
     x = struct.pack('<f', x)
     y = struct.pack('<f', y)
@@ -127,7 +127,7 @@ def encoder(dataDict):
     byte_str += FF
     byte_str += FF
 
-    print binascii.hexlify(byte_str)
+    print(binascii.hexlify(byte_str))
 
     '''
     byte_str = ID+x+y+z+resource+quantity+CC+second+minute+hour+FF+FF+FF+FF
@@ -170,7 +170,7 @@ def decoder(hex_str):
     #print second + minute + hour
 
     time = str(hour) + ':' + str(minute) + ':' + str(second)
-    print time
+    print(time)
     dataList.append(time)
 
     return dataList
@@ -178,7 +178,7 @@ def decoder(hex_str):
 
 def addData():
     while True:
-        serialInput = ser.readline()
+        serialInput = ser.readline().decode("utf-8")
         if serialInput:
             dataList = decoder(serialInput)
 
@@ -210,7 +210,7 @@ def sendData(data):
         "time" : data[6]
     }
 
-    print "ent: ", entry
+    print("ent: ", entry)
 
     writeData(entry)
 
@@ -229,13 +229,13 @@ def getQueue():
             data = q.pop()
             sendData(data)
 
-ser = serial.Serial(port='/dev/cu.usbmodem14521', baudrate=9600, timeout=0.05)
-
-deleteAll()
+ser = serial.Serial(port='/dev/cu.usbmodem14101', baudrate=9600, timeout=0.05)
 
 # Start Threads
 t1 = threading.Thread(target=addData)
 t2 = threading.Thread(target=getQueue)
+
+deleteAll()
 
 t1.start()
 t2.start()
