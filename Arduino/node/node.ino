@@ -20,7 +20,7 @@ struct RadioPacket{
 #define BUTTON_B 6
 #define BUTTON_C 5
 
-// Feather M0 pins 
+// Feather M0 pins
 #define RFM95_CS 8
 #define RFM95_RST 4
 #define RFM95_INT 3
@@ -40,7 +40,7 @@ RH_RF95 * rf95ptr = &rf95;
 TinyGPSPlus gps;
 
 //  Config
-unsigned short DEVICE_ID = 0x4944;
+unsigned short DEVICE_ID = 0x539;
 #define LED 13
 #define PACKET_SIZE 24
 #define LONG_RANGE 0              //  at a penalty of much lower bandwidth
@@ -61,12 +61,12 @@ void setup() {
   Serial.begin(9600);
   //  GPS serial
   Serial1.begin(9600);
-  
+
   InitializeButtons();
   PopulateResourcesArray();
   SetUpRadio(rf95ptr);
   InitializeDisplay();
-  
+
   Serial.println("Set up finished... entering loop");
 }
 
@@ -80,7 +80,7 @@ void loop() {
       resourceIterator -= 1;
     }
     if(!digitalRead(BUTTON_C)){
-      //  Start timer for packet sent 
+      //  Start timer for packet sent
       lastPacketSent = millis();
       selected = 1;
     }
@@ -90,7 +90,7 @@ void loop() {
     display.println("Choose a resource: ");
     display.println(resources[resourceIterator % NUMBER_OF_RESOURCES]);
     display.display();
-    
+
   }
   else if(selected == 1){
     if(!digitalRead(BUTTON_A)){
@@ -107,17 +107,17 @@ void loop() {
       quantity = 0;
       selected = 0;
     }
-    
+
     display.clearDisplay();
     display.setCursor(0,0);
     display.println("Selected: ");
 
     display.println(resources[resourceIterator % NUMBER_OF_RESOURCES]);
-    
+
     display.println();
     display.print("Quantity: ");
     display.println(quantity);
-    
+
     display.display();
 
     //  If SEND_INTERVAL has elapsed, construct packet and send
@@ -133,7 +133,7 @@ void loop() {
       radioPacket.z = (unsigned long)gps.altitude.feet();
       radioPacket.resource = resourceIterator % NUMBER_OF_RESOURCES;
       radioPacket.quantity = quantity;
-      radioPacket.timestamp = gps.time.value();
+      radioPacket.timestamp = (gps.time.hour() << 24) + (gps.time.minute() << 16) + (gps.time.second() << 8) + 0xFF;//gps.time.value();
       radioPacket.unused = 0xFFFFFFFF;
 
       uint8_t radioBuffer[sizeof(RadioPacket)];
@@ -151,11 +151,11 @@ void loop() {
 
       delay(10);
       rf95.send((uint8_t *)radioBuffer, PACKET_SIZE);
-      Serial.print("Waiting for packet to complete... "); 
+      Serial.print("Waiting for packet to complete... ");
       delay(10);
       rf95.waitPacketSent();
       Serial.println("Sent");
-      
+
       lastPacketSent = currentTime;
       digitalWrite(LED, LOW);
     }
@@ -169,7 +169,7 @@ void loop() {
       gps.encode(c);
     }
   }
-  
+
   //  So button does not trigger multiple times per press
   delay(80);
 }
@@ -192,27 +192,27 @@ void PopulateResourcesArray(){
 
 void SetUpRadio(RH_RF95 * rf95){
   Serial.println("Entering radio set up");
-  
+
   pinMode(RFM95_RST, OUTPUT);
   digitalWrite(RFM95_RST, HIGH);
- 
+
   delay(100);
- 
+
   // manual reset
   digitalWrite(RFM95_RST, LOW);
   delay(10);
   digitalWrite(RFM95_RST, HIGH);
   delay(10);
- 
+
   while (!rf95->init()) {
     Serial.println("LoRa radio init failed");
     while (1) {}
   }
-  
+
   //////       //////
   // Radio init OK //
   //////       //////
-  
+
   if (!rf95->setFrequency(RF95_FREQ)) {
     Serial.println("setFrequency failed");
     while (1) {}
@@ -220,16 +220,16 @@ void SetUpRadio(RH_RF95 * rf95){
   //////          //////
   // Set frequency OK //
   //////          //////
-  
+
   // Defaults after init are 434.0MHz, 13dBm, Bw = 125 kHz, Cr = 4/5, Sf = 128chips/symbol, CRC on
   // The default transmitter power is 13dBm, using PA_BOOST.
-  // If you are using RFM95/96/97/98 modules which uses the PA_BOOST transmitter pin, then 
+  // If you are using RFM95/96/97/98 modules which uses the PA_BOOST transmitter pin, then
   // you can set transmitter powers from 5 to 23 dBm:
   rf95->setTxPower(23, false);
   #if LONG_RANGE
     rf95->setModemConfig(RH_RF95::Bw31_25Cr48Sf512);
   #endif
-  
+
   //////               //////
   // Radio set up finished //
   //////               //////
@@ -282,4 +282,3 @@ uint32_t pack754(double f)
   // return the final answer
   return (sign<<(32-1)) | (exp<<(32-8-1)) | significand;
 }
-

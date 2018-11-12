@@ -13,7 +13,7 @@ struct RadioPacket{
   unsigned long unused;
 } __attribute__((packed));
 
-// Feather M0 pins 
+// Feather M0 pins
 #define RFM95_CS 8
 #define RFM95_RST 4
 #define RFM95_INT 3
@@ -56,7 +56,7 @@ void loop() {
       gps.encode(c);
     }
   }
-  
+
   //  Report self GPS every SELF_REPORT_INTERVAL seconds
   time_t currentTime = millis();
   if((currentTime - lastSelfReport) > SELF_REPORT_INTERVAL){
@@ -80,11 +80,11 @@ void loop() {
 
     //  Send sync packet to other gateways if told to
     if(Serial.available()){
-  
+
       //  Create two dimensional array so we can send multiple packets of PACKET_SIZE
       uint8_t gatewaySyncBuffer[128][PACKET_SIZE];
       memset(gatewaySyncBuffer, 0, sizeof(uint8_t) * 128 * PACKET_SIZE);
-  
+
       //  Populate radio packets in buffer
       int iterator = 0;
       while(Serial.available()){
@@ -92,12 +92,12 @@ void loop() {
         gatewaySyncBuffer[iterator / PACKET_SIZE][iterator % PACKET_SIZE] = c;
         iterator++;
       }
-    
+
   //    for(int i = 0; i < iterator; i++){
   //      Serial.print(gatewaySyncBuffer[i]);
   //    }
   //    Serial.println(iterator);
-  
+
       //  Send all constructed packets
       digitalWrite(LED, HIGH);
       for(int i = 0; i < iterator / PACKET_SIZE; i++){
@@ -116,7 +116,7 @@ void loop() {
   if(rf95.available()){
     uint8_t buf[RH_RF95_MAX_MESSAGE_LEN];
     uint8_t len = sizeof(buf);
-  
+
     if (rf95.recv(buf, &len)){
       digitalWrite(LED, HIGH);
 
@@ -128,7 +128,7 @@ void loop() {
         Serial.print(" ");
       }
       //Serial.println();
-  
+
       digitalWrite(LED, LOW);
     }
     else{
