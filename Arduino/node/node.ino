@@ -40,7 +40,7 @@ RH_RF95 * rf95ptr = &rf95;
 TinyGPSPlus gps;
 
 //  Config
-unsigned short DEVICE_ID = 0x539;
+unsigned short DEVICE_ID = random(1, 32000);
 #define LED 13
 #define PACKET_SIZE 24
 #define LONG_RANGE 0              //  at a penalty of much lower bandwidth

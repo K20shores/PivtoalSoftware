@@ -75,6 +75,7 @@ void loop() {
       Serial.print(requestDumpPacket[i], HEX);
       Serial.print(" ");
     }
+    //Serial.println();
 
     delay(100);
 
@@ -120,7 +121,7 @@ void loop() {
     if (rf95.recv(buf, &len)){
       digitalWrite(LED, HIGH);
 
-      for(int i = 0; i < sizeof(buf); i++){
+      for(int i = 0; i < sizeof(RadioPacket); i++){
         if(buf[i] < 16){
           Serial.print(0, HEX);
         }
@@ -130,9 +131,6 @@ void loop() {
       //Serial.println();
 
       digitalWrite(LED, LOW);
-    }
-    else{
-      Serial.print("[]");
     }
   }
 
@@ -148,7 +146,7 @@ void reportSelfPositioning(TinyGPSPlus gps){
   radioPacket.z = (unsigned long)gps.altitude.feet();
   radioPacket.resource = 0xFF;
   radioPacket.quantity = 0xFF;
-  radioPacket.timestamp = gps.time.value();
+  radioPacket.timestamp = (gps.time.hour() << 24) + (gps.time.minute() << 16) + (gps.time.second() << 8) + 0xFF;//gps.time.value();
   radioPacket.unused = 0xFFFFFFFF;
 
   char radioBuffer[sizeof(RadioPacket)];
