@@ -17,7 +17,7 @@ const ResourceList = ({resources, showDetails}) => (
 
             <tbody>
                 {resources && resources.map(r => {
-                  r.id != -1 &&
+                  return r.resource_type != -1 &&
                   (
                       <tr key={r.nodeID} onClick={() => showDetails(r.nodeID)}>
                           <td>{r.nodeID}</td>
