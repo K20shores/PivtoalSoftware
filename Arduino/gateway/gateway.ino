@@ -13,7 +13,7 @@ struct RadioPacket{
   unsigned long unused;
 } __attribute__((packed));
 
-// Feather M0 pins 
+// Feather M0 pins
 #define RFM95_CS 8
 #define RFM95_RST 4
 #define RFM95_INT 3
@@ -27,7 +27,7 @@ RH_RF95 * rf95ptr = &rf95;
 TinyGPSPlus gps;
 
 //  Config
-unsigned short DEVICE_ID = 0x1337;
+unsigned short DEVICE_ID = (short)random(1, 64000);
 #define LED 13
 #define PACKET_SIZE 24
 #define LONG_RANGE 0                    //  at a penalty of much lower bandwidth
@@ -56,7 +56,7 @@ void loop() {
       gps.encode(c);
     }
   }
-  
+
   //  Report self GPS every SELF_REPORT_INTERVAL seconds
   time_t currentTime = millis();
   if((currentTime - lastSelfReport) > SELF_REPORT_INTERVAL){
@@ -75,16 +75,17 @@ void loop() {
       Serial.print(requestDumpPacket[i], HEX);
       Serial.print(" ");
     }
+    //Serial.println();
 
     delay(100);
 
     //  Send sync packet to other gateways if told to
     if(Serial.available()){
-  
+
       //  Create two dimensional array so we can send multiple packets of PACKET_SIZE
       uint8_t gatewaySyncBuffer[128][PACKET_SIZE];
       memset(gatewaySyncBuffer, 0, sizeof(uint8_t) * 128 * PACKET_SIZE);
-  
+
       //  Populate radio packets in buffer
       int iterator = 0;
       while(Serial.available()){
@@ -92,12 +93,12 @@ void loop() {
         gatewaySyncBuffer[iterator / PACKET_SIZE][iterator % PACKET_SIZE] = c;
         iterator++;
       }
-    
+
   //    for(int i = 0; i < iterator; i++){
   //      Serial.print(gatewaySyncBuffer[i]);
   //    }
   //    Serial.println(iterator);
-  
+
       //  Send all constructed packets
       digitalWrite(LED, HIGH);
       for(int i = 0; i < iterator / PACKET_SIZE; i++){
@@ -116,11 +117,11 @@ void loop() {
   if(rf95.available()){
     uint8_t buf[RH_RF95_MAX_MESSAGE_LEN];
     uint8_t len = sizeof(buf);
-  
+
     if (rf95.recv(buf, &len)){
       digitalWrite(LED, HIGH);
 
-      for(int i = 0; i < sizeof(buf); i++){
+      for(int i = 0; i < sizeof(RadioPacket); i++){
         if(buf[i] < 16){
           Serial.print(0, HEX);
         }
@@ -128,11 +129,8 @@ void loop() {
         Serial.print(" ");
       }
       //Serial.println();
-  
+
       digitalWrite(LED, LOW);
-    }
-    else{
-      Serial.print("[]");
     }
   }
 
@@ -148,7 +146,7 @@ void reportSelfPositioning(TinyGPSPlus gps){
   radioPacket.z = (unsigned long)gps.altitude.feet();
   radioPacket.resource = 0xFF;
   radioPacket.quantity = 0xFF;
-  radioPacket.timestamp = gps.time.value();
+  radioPacket.timestamp = (gps.time.hour() << 24) + (gps.time.minute() << 16) + (gps.time.second() << 8) + 0xFF;//gps.time.value();
   radioPacket.unused = 0xFFFFFFFF;
 
   char radioBuffer[sizeof(RadioPacket)];
