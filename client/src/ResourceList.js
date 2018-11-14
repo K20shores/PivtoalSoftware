@@ -16,15 +16,18 @@ const ResourceList = ({resources, showDetails}) => (
             </thead>
 
             <tbody>
-                {resources && resources.map(r => (
-                    <tr key={r.nodeID} onClick={() => showDetails(r.nodeID)}>
-                        <td>{r.nodeID}</td>
-                        <td>{r.resource_type}</td>
-                        <td>{r.resource_amount}</td>
-                        <td>{r.x_coord}</td>
-                        <td>{r.y_coord}</td>
-                    </tr>
-                ))}
+                {resources && resources.map(r => {
+                  r.id != -1 &&
+                  (
+                      <tr key={r.nodeID} onClick={() => showDetails(r.nodeID)}>
+                          <td>{r.nodeID}</td>
+                          <td>{r.resource_type}</td>
+                          <td>{r.resource_amount}</td>
+                          <td>{r.x_coord}</td>
+                          <td>{r.y_coord}</td>
+                      </tr>
+                  )
+                })}
             </tbody>
         </Table>
     </div>
