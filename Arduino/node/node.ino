@@ -5,12 +5,12 @@
 #include <avr/dtostrf.h>
 
 struct RadioPacket{
-  short ID;
+  unsigned short ID;
   unsigned long x;
   unsigned long y;
   unsigned long z;
-  char resource;
-  char quantity;
+  unsigned char resource;
+  unsigned char quantity;
   unsigned long timestamp;
   unsigned long unused;
 } __attribute__((packed));
@@ -45,7 +45,7 @@ unsigned short DEVICE_ID = 0;
 #define PACKET_SIZE 24
 #define LONG_RANGE 0              //  at a penalty of much lower bandwidth
 #define SEND_INTERVAL 5000        //  ms delay between sending
-#define NUMBER_OF_RESOURCES 5
+#define NUMBER_OF_RESOURCES 7
 
 //  Globals
 int selected = 0;
@@ -95,7 +95,7 @@ void loop() {
   }
   else if(selected == 1){
     if(!digitalRead(BUTTON_A)){
-      if(quantity < 32){
+      if(quantity < 255){
         quantity += 1;
       }
     }
@@ -187,8 +187,10 @@ void PopulateResourcesArray(){
   resources[0] = "Search/rescue team";
   resources[1] = "Medical team";
   resources[2] = "Ambulance";
-  resources[3] = "Wood";
-  resources[4] = "Water";
+  resources[3] = "Boat";
+  resources[4] = "Wood (sq ft)";
+  resources[5] = "Meals";
+  resources[6] = "Cases of water";
 }
 
 void SetUpRadio(RH_RF95 * rf95){

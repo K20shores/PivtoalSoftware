@@ -3,12 +3,12 @@
 #include <avr/dtostrf.h>
 
 struct RadioPacket{
-  short ID;
+  unsigned short ID;
   unsigned long x;
   unsigned long y;
   unsigned long z;
-  char resource;
-  char quantity;
+  unsigned char resource;
+  unsigned char quantity;
   unsigned long timestamp;
   unsigned long unused;
 } __attribute__((packed));
@@ -32,7 +32,7 @@ unsigned short DEVICE_ID = 0;
 #define PACKET_SIZE 24
 #define LONG_RANGE 0                    //  at a penalty of much lower bandwidth
 #define SELF_REPORT_INTERVAL 5000
-#define DATABASE_DUMP_INTERVAL 12000
+#define DATABASE_DUMP_INTERVAL 60000
 #define NUMBER_OF_RESOURCES 5
 
 //  Globals
@@ -62,7 +62,8 @@ void loop() {
   time_t currentTime = millis();
   if((currentTime - lastSelfReport) > SELF_REPORT_INTERVAL){
     reportSelfPositioning(gps);
-    lastSelfReport = currentTime;
+    //  Add random value to stagger self reports
+    lastSelfReport = currentTime + random(-1000, 1000);
   }
 
   if((currentTime - lastDatabaseDump) > DATABASE_DUMP_INTERVAL){
@@ -110,7 +111,8 @@ void loop() {
       }
       digitalWrite(LED, LOW);
     }
-    lastDatabaseDump = currentTime;
+    //  Add random value to stagger database dumps
+    lastDatabaseDump = currentTime + random(-5000, 5000);
   }
 
 
