@@ -1,16 +1,7 @@
 import React from 'react';
 // import './style.css';
 import {Table} from 'react-bootstrap'
-const resourceNames = [
-  "Search/Rescue team",
-  "Medical Team",
-  "Ambulance",
-  "Boat",
-  "Wood (sq ft)",
-  "Meals",
-  "Cases of Water"
-];
-
+import {resourceNames} from './Marker'
 const ResourceList = ({resources, showDetails}) => (
     <div>
         <h2>Resources</h2>

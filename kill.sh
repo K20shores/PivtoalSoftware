@@ -1,0 +1,2 @@
+pkill Python
+pkill mongod
