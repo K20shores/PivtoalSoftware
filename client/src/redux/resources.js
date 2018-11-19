@@ -19,7 +19,7 @@ export default function reducer(state = INITIAL_STATE, action = {}){
                     'lat': resource.x_coord,
                     'lng': resource.y_coord
                 }
-                let m = L.marker(resource.location, {icon:  blackIcon})
+                let m = L.marker(resource.location, {icon:  icons[resource.resource_type]})
                 //let m = L.marker(resource.location, {icon: resource.name !== '' ? icons[resource.name] : blackIcon})
                 m.addTo(action.map)
                 m.bindPopup(`Type: ${resource.resource_type}<br>

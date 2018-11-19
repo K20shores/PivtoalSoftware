@@ -1,6 +1,16 @@
 import React from 'react';
 // import './style.css';
 import {Table} from 'react-bootstrap'
+const resourceNames = [
+  "Search/Rescue team",
+  "Medical Team",
+  "Ambulance",
+  "Boat",
+  "Wood (sq ft)",
+  "Meals",
+  "Cases of Water"
+];
+
 const ResourceList = ({resources, showDetails}) => (
     <div>
         <h2>Resources</h2>
@@ -21,10 +31,10 @@ const ResourceList = ({resources, showDetails}) => (
                   (
                       <tr key={r.nodeID} onClick={() => showDetails(r.nodeID)}>
                           <td>{r.nodeID}</td>
-                          <td>{r.resource_type}</td>
+                          <td>{resourceNames[r.resource_type]}</td>
                           <td>{r.resource_amount}</td>
-                          <td>{r.x_coord}</td>
-                          <td>{r.y_coord}</td>
+                          <td>{r.x_coord.toFixed(6)}</td>
+                          <td>{r.y_coord.toFixed(6)}</td>
                       </tr>
                   )
                 })}
