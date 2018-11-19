@@ -3,12 +3,12 @@
 #include <avr/dtostrf.h>
 
 struct RadioPacket{
-  short ID;
+  unsigned short ID;
   unsigned long x;
   unsigned long y;
   unsigned long z;
-  char resource;
-  char quantity;
+  unsigned char resource;
+  unsigned char quantity;
   unsigned long timestamp;
   unsigned long unused;
 } __attribute__((packed));
@@ -27,12 +27,12 @@ RH_RF95 * rf95ptr = &rf95;
 TinyGPSPlus gps;
 
 //  Config
-unsigned short DEVICE_ID = (short)random(1, 64000);
+unsigned short DEVICE_ID = 0;
 #define LED 13
 #define PACKET_SIZE 24
 #define LONG_RANGE 0                    //  at a penalty of much lower bandwidth
 #define SELF_REPORT_INTERVAL 5000
-#define DATABASE_DUMP_INTERVAL 12000
+#define DATABASE_DUMP_INTERVAL 60000
 #define NUMBER_OF_RESOURCES 5
 
 //  Globals
@@ -45,6 +45,7 @@ void setup() {
   Serial.setTimeout(100);
   Serial1.begin(9600);
 
+  DEVICE_ID = getUniqueID();
   SetUpRadio(rf95ptr);
 }
 
@@ -61,7 +62,8 @@ void loop() {
   time_t currentTime = millis();
   if((currentTime - lastSelfReport) > SELF_REPORT_INTERVAL){
     reportSelfPositioning(gps);
-    lastSelfReport = currentTime;
+    //  Add random value to stagger self reports
+    lastSelfReport = currentTime + random(-1000, 1000);
   }
 
   if((currentTime - lastDatabaseDump) > DATABASE_DUMP_INTERVAL){
@@ -109,7 +111,8 @@ void loop() {
       }
       digitalWrite(LED, LOW);
     }
-    lastDatabaseDump = currentTime;
+    //  Add random value to stagger database dumps
+    lastDatabaseDump = currentTime + random(-5000, 5000);
   }
 
 
@@ -233,4 +236,26 @@ uint32_t pack754(double f)
 
   // return the final answer
   return (sign<<(32-1)) | (exp<<(32-8-1)) | significand;
+}
+
+unsigned short getUniqueID() {
+  volatile uint32_t val1, val2, val3, val4;
+  volatile uint32_t *ptr1 = (volatile uint32_t *)0x0080A00C;
+  val1 = *ptr1;
+  volatile uint32_t *ptr = (volatile uint32_t *)0x0080A040;
+  val2 = *ptr;
+  ptr++;
+  val3 = *ptr;
+  ptr++;
+  val4 = *ptr;
+
+//  Serial.print("chip id: 0x");
+//  char buf[33];
+//  sprintf(buf, "%8x%8x%8x%8x", val1, val2, val3, val4);
+//  Serial.println(buf);
+
+  Serial.print("DEVICE_ID: ");
+  Serial.println((unsigned short)val1);
+
+  return (unsigned short)val1;
 }

@@ -5,12 +5,12 @@
 #include <avr/dtostrf.h>
 
 struct RadioPacket{
-  short ID;
+  unsigned short ID;
   unsigned long x;
   unsigned long y;
   unsigned long z;
-  char resource;
-  char quantity;
+  unsigned char resource;
+  unsigned char quantity;
   unsigned long timestamp;
   unsigned long unused;
 } __attribute__((packed));
@@ -40,12 +40,12 @@ RH_RF95 * rf95ptr = &rf95;
 TinyGPSPlus gps;
 
 //  Config
-unsigned short DEVICE_ID = (short)random(1, 64000);
+unsigned short DEVICE_ID = 0;
 #define LED 13
 #define PACKET_SIZE 24
 #define LONG_RANGE 0              //  at a penalty of much lower bandwidth
 #define SEND_INTERVAL 5000        //  ms delay between sending
-#define NUMBER_OF_RESOURCES 5
+#define NUMBER_OF_RESOURCES 7
 
 //  Globals
 int selected = 0;
@@ -62,6 +62,7 @@ void setup() {
   //  GPS serial
   Serial1.begin(9600);
 
+  DEVICE_ID = getUniqueID();
   InitializeButtons();
   PopulateResourcesArray();
   SetUpRadio(rf95ptr);
@@ -94,7 +95,7 @@ void loop() {
   }
   else if(selected == 1){
     if(!digitalRead(BUTTON_A)){
-      if(quantity < 32){
+      if(quantity < 255){
         quantity += 1;
       }
     }
@@ -186,8 +187,10 @@ void PopulateResourcesArray(){
   resources[0] = "Search/rescue team";
   resources[1] = "Medical team";
   resources[2] = "Ambulance";
-  resources[3] = "Wood";
-  resources[4] = "Water";
+  resources[3] = "Boat";
+  resources[4] = "Wood (sq ft)";
+  resources[5] = "Meals";
+  resources[6] = "Cases of water";
 }
 
 void SetUpRadio(RH_RF95 * rf95){
@@ -281,4 +284,26 @@ uint32_t pack754(double f)
 
   // return the final answer
   return (sign<<(32-1)) | (exp<<(32-8-1)) | significand;
+}
+
+unsigned short getUniqueID() {
+  volatile uint32_t val1, val2, val3, val4;
+  volatile uint32_t *ptr1 = (volatile uint32_t *)0x0080A00C;
+  val1 = *ptr1;
+  volatile uint32_t *ptr = (volatile uint32_t *)0x0080A040;
+  val2 = *ptr;
+  ptr++;
+  val3 = *ptr;
+  ptr++;
+  val4 = *ptr;
+
+//  Serial.print("chip id: 0x");
+//  char buf[33];
+//  sprintf(buf, "%8x%8x%8x%8x", val1, val2, val3, val4);
+//  Serial.println(buf);
+
+  Serial.print("DEVICE_ID: ");
+  Serial.println((unsigned short)val1);
+
+  return (unsigned short)val1;
 }
