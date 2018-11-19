@@ -1,5 +1,5 @@
 import L from 'leaflet'
-import {icons, blackIcon} from '../Marker';
+import {icons, blackIcon,resourceNames} from '../Marker';
 //set markers
 const SET_MARKERS = 'resources/SET_MARKERS';
 const INITIAL_STATE = {markers: [], resources:[]}
@@ -19,12 +19,13 @@ export default function reducer(state = INITIAL_STATE, action = {}){
                     'lat': resource.x_coord,
                     'lng': resource.y_coord
                 }
-                let m = L.marker(resource.location, {icon:  icons[resource.resource_type]})
-                //let m = L.marker(resource.location, {icon: resource.name !== '' ? icons[resource.name] : blackIcon})
+                //let m = L.marker(resource.location, {icon:  icons[resource.resource_type]})
+                //console.log(resource.type, icons)
+                let m = L.marker(resource.location, {icon: resource.resource_type !== -1 ? icons[resource.resource_type] : blackIcon})
                 m.addTo(action.map)
-                m.bindPopup(`Type: ${resource.resource_type}<br>
+                m.bindPopup(`Type: ${resourceNames[resource.resource_type]}<br>
                   Amount:  ${resource.resource_amount} <br>
-                  Lat/Long: ${resource.x_coord}/${resource.y_coord}
+                  Lat/Long: ${resource.x_coord.toFixed(6)}/${resource.y_coord.toFixed(6)}
                   Last Updated: ${resource.time}
                     `)
                 newMarkers[resource.nodeID] = m;

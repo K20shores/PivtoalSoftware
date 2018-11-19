@@ -42,7 +42,7 @@ class App extends Component {
       .then(response =>{
         this.props.setMarkers(response.data, map)
       })
-    }, 10000);
+    }, 5000);
   }
   showDetails = (i) => {
     this.setState({selectedResource: this.state.resources[i]})

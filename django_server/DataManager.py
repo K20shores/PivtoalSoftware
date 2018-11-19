@@ -5,7 +5,7 @@ import threading
 import serial
 import struct
 import binascii
-
+import time
 DB_URL = 'mongodb://localhost:27017'
 DB_NAME = 'PIVOTAL_DB'
 DB_COLLECTION = 'NodeData'
@@ -230,12 +230,13 @@ def getQueue():
             data = q.pop()
             sendData(data)
 
-ser = serial.Serial(port='/dev/cu.usbmodem14101', baudrate=9600, timeout=0.05)
+ser = serial.Serial(port='/dev/cu.usbmodem14201', baudrate=9600, timeout=0.05)
 
 # Start Threads
 t1 = threading.Thread(target=addData)
 t2 = threading.Thread(target=getQueue)
 
+time.sleep(2)
 deleteAll()
 
 t1.start()

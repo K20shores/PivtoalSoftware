@@ -30,7 +30,7 @@ const ResourceList = ({resources, showDetails}) => (
                   return r.resource_type != -1 &&
                   (
                       <tr key={r.nodeID} onClick={() => showDetails(r.nodeID)}>
-                          <td>{r.nodeID}</td>
+                          <td>{Math.abs(r.nodeID)}</td>
                           <td>{resourceNames[r.resource_type]}</td>
                           <td>{r.resource_amount}</td>
                           <td>{r.x_coord.toFixed(6)}</td>

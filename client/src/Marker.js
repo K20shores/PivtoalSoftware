@@ -2,6 +2,16 @@
 import React from 'react'
 import L from 'leaflet'
 
+export const resourceNames = [
+  "Search/Rescue",
+  "Medical Team",
+  "Ambulance",
+  "Boat",
+  "Wood (sq ft)",
+  "Meals",
+  "Cases of Water"
+];
+
 const srIcon = L.icon({
     iconUrl: 'S&R.png',
     iconSize:     [28, 41], // size of the icon
