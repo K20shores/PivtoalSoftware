@@ -1,59 +1,67 @@
 
 import React from 'react'
 import L from 'leaflet'
-const Marker = ({ text,severity }) => <div style={{color: severity <= 1 ? 'yellow' : 'red' }}>{text}</div>;
-export default Marker;
 
-//scale markers with zoom
-//find better icon.
-//zoom issue
-//expand resources to bordered
-//border on the left side
-
-const bandagesIcon = L.icon({
-    iconUrl: 'green-marker-icon.png',
-    // shadowUrl: 'leaf-shadow.png',
-
+const srIcon = L.icon({
+    iconUrl: 'S&R.png',
     iconSize:     [28, 41], // size of the icon
-    // shadowSize:   [50, 64], // size of the shadow
-    iconAnchor:   [22, 94], // point of the icon which will correspond to marker's location
     shadowAnchor: [4, 62],  // the same for the shadow
     popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
 });
 
-const blanketsIcon = L.icon({
-    iconUrl: 'yellow-marker-icon.png',
-    // shadowUrl: 'leaf-shadow.png',
-
+const medIcon = L.icon({
+    iconUrl: 'medTeam.png',
     iconSize:     [28, 41], // size of the icon
-    // shadowSize:   [50, 64], // size of the shadow
-    iconAnchor:   [22, 94], // point of the icon which will correspond to marker's location
     shadowAnchor: [4, 62],  // the same for the shadow
     popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
 });
 
-const foodIcon = L.icon({
-    iconUrl: 'red-marker-icon.png',
-    // shadowUrl: 'leaf-shadow.png',
-
+const ambulanceIcon = L.icon({
+    iconUrl: 'ambulance.png',
     iconSize:     [28, 41], // size of the icon
-    // shadowSize:   [50, 64], // size of the shadow
-    //iconAnchor:   [22, 94], // point of the icon which will correspond to marker's location
     shadowAnchor: [4, 62],  // the same for the shadow
-    popupAnchor:  [-3, -30] // point from which the popup should open relative to the iconAnchor
+    popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+});
+const boatIcon = L.icon({
+    iconUrl: 'boat.png',
+    iconSize:     [28, 41], // size of the icon
+    shadowAnchor: [4, 62],  // the same for the shadow
+    popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+});
+
+const woodIcon = L.icon({
+    iconUrl: 'wood.png',
+    iconSize:     [28, 41], // size of the icon
+    shadowAnchor: [4, 62],  // the same for the shadow
+    popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+});
+const mealIcon = L.icon({
+    iconUrl: 'meals.png',
+    iconSize:     [28, 41], // size of the icon
+    shadowAnchor: [4, 62],  // the same for the shadow
+    popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+});
+
+const waterIcon = L.icon({
+    iconUrl: 'water.png',
+    iconSize:     [28, 41], // size of the icon
+    shadowAnchor: [4, 62],  // the same for the shadow
+    popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
 });
 
 export const blackIcon = L.icon({
     iconUrl: 'black-marker-icon.png',
-    // shadowUrl: 'leaf-shadow.png',
-
     iconSize:     [28, 41], // size of the icon
-    // shadowSize:   [50, 64], // size of the shadow
-    //iconAnchor:   [22, 94], // point of the icon which will correspond to marker's location
     shadowAnchor: [4, 62],  // the same for the shadow
     popupAnchor:  [-3, -30] // point from which the popup should open relative to the iconAnchor
 });
 
 export const icons = [
-    
+    srIcon,
+    medIcon,
+    ambulanceIcon,
+    boatIcon,
+    woodIcon,
+    mealIcon,
+    waterIcon
 ]
