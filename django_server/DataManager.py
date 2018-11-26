@@ -236,7 +236,7 @@ def getQueue():
 
 try:
      
-    gates = [x for x in os.listdir("/dev") if x.startswith("cu.usbmodem") == True]
+    gates = [x for x in os.listdir("/dev") if x.startswith("cu.usbmodem") or x.startswith("ttyACM")]
     path = "/dev/" + gates[0]
     print("path",path)
     if os.path.exists(path):
