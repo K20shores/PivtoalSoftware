@@ -18,6 +18,8 @@ from django.urls import path, re_path
 from django.views.generic import TemplateView
 from . import DataManager
 
+DataManager.deleteAll()
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', DataManager.findResources, name='resources')
