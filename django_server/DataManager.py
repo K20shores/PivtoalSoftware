@@ -14,6 +14,7 @@ DB_NAME = 'PIVOTAL_DB'
 DB_COLLECTION = 'NodeData'
 
 def deleteAll():
+    print("Clearing old data")
     client = pymongo.MongoClient(DB_URL)
     db = client[DB_NAME]
     col = db[DB_COLLECTION]
@@ -234,9 +235,10 @@ def getQueue():
             sendData(data)
 
 try:
-    print(serial_ports())
-
-    path = '/dev/cu.usbmodem14201'
+     
+    gates = [x for x in os.listdir("/dev") if x.startswith("cu.usbmodem") or x.startswith("ttyACM")]
+    path = "/dev/" + gates[0]
+    print("path",path)
     if os.path.exists(path):
         ser = serial.Serial(port=path, baudrate=9600, timeout=0.05)
         # Start Threads
@@ -248,7 +250,7 @@ try:
 
         t1.start()
         t2.start()
-    # else:
-    #     raise ValueError("No device")
+    else:
+         raise ValueError("No device")
 except Exception as e:
     raise e
