@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 import axios from 'axios'
 import ResourceList from './ResourceList';
-import DetailedList from './DetailedList'
+import Legend from './Legend'
 
 import L from 'leaflet'
 
 import {connect} from 'react-redux'
 import {setMarkers} from './redux/resources'
 import './style.css'
+
 class App extends Component {
   constructor(props){
     super(props);
@@ -53,7 +54,6 @@ class App extends Component {
   render() {
     return (
       <div>
-
         <div style={{display: 'flex', flexDirection: 'row', backgroundColor: '#f1ecec'}}>
           <div id="mapid"></div>
           <div id="resource">
@@ -64,12 +64,7 @@ class App extends Component {
               />
             </div>
             <div className='card'>
-              { this.state.selectedResource && 
-                <DetailedList
-                  selectedResource = {this.state.selectedResource}
-                  hideDetails = {this.hideDetails}
-                />
-              }
+              <Legend/>
             </div>
 
           </div>

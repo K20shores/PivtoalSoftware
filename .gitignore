@@ -1,2 +1,4 @@
 serial_simulator/__pycache__
 screenshots/
+env/
+.DS_STORE
