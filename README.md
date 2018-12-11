@@ -13,12 +13,9 @@ https://docs.mongodb.com/v3.2/tutorial/install-mongodb-on-windows/
 https://docs.mongodb.com/manual/administration/install-on-linux/
 
 ### Install UI
+Go to the root diretory of the project and run the following command
 ```
-cd client
-```
-
-```
-npm install
+cd client && npm install && cd ..
 ```
 
 ## Running Instructions
