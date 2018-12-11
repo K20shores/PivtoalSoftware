@@ -1,22 +1,33 @@
 # pivotal-software
 A pivotal approach to graduating
 
-## Running Instructions
-* Start backend
-`
-python manage.py runserver
-`
-* Start frontend
+## Installation Mongo
 
-`
+### Mac
+https://treehouse.github.io/installation-guides/mac/mongo-mac.html
+
+### Windows
+https://docs.mongodb.com/v3.2/tutorial/install-mongodb-on-windows/
+
+### Linux
+https://docs.mongodb.com/manual/administration/install-on-linux/
+
+### Install UI
+```
 cd client
-`
+```
 
-`npm install
-`
+```
+npm install
+```
 
-`
-npm start
-`
+## Running Instructions
+```
+chmod +x run.sh
+```
+
+```
+./run.sh
+```
 
 ![Design Diagram](./design_diagram.png)
