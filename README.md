@@ -26,6 +26,9 @@ npm install
 chmod +x run.sh
 ```
 
+Connect the gateway to the computer and then run ``./run.sh``
+Note: If you do not connect the gateway before running the bash script to start the software, the system will fail.
+
 ```
 ./run.sh
 ```
